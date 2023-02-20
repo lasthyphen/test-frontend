@@ -1,0 +1,351 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+import RefDetailCollapse from '~/components/reference/RefDetailCollapse'
+
+export const meta = {
+  id: 'intrachain-transfer',
+  title: 'Intrachain Transfers',
+  description: 'Learn how to make intrachain transfers in Dijets',
+  sidebar_label: 'Intrachain Transfer',
+}
+
+### Optional Prerequisites:
+
+1. You have completed the tutorial for "How to run a Dijets Node"
+
+1. You have completed the tutorial for ["Funding a Test Account"](./funding-test-accounts)
+
+1. You have some balance of Test DJTX on any of the Value, Utility or Method Chain.
+
+1. You have Go language installed on your system with $GOBIN set to be [in your path.](#setting-bin-in-your-path)
+
+
+## Introduction
+
+Please note that this article shows how to transfer DJTX programmatically between any two
+chains on Dijets.
+
+## Getting Started
+
+To use DijetsJS, you can clone the repo:
+
+```text
+git clone https://github.com/Dijets-Inc/dijetsJs.git
+```
+
+or add it to an existing project:
+
+```text
+yarn add --dev dijetsJs
+```
+
+For this tutorial we will use `ts-node` to run the example scripts directly from the dijetsJS directory.
+
+In order to send DJTX, you need to have some DJTX. You can use a pre-funded
+account on local network or get testnet DJTX from the [Dijets
+Faucet](https://faucet.dijets.io), which is an easy way to get to play around
+with Dijets. After getting comfortable with your code, you can run the code
+on Mainnet once you have made the necessary/required changes.
+
+## Transferring DJTX Using DijetsJS
+
+The easiest way to transfer DJTX between chains is to use
+[DijetsJs](https://github.com/Dijets-Inc/dijetsJs) which is a programmatic
+way to access and move DJTX.
+
+DijetsJs allows you to create and sign transactions locally which is why it
+is the recommended way to transfer DJTX between chains. We are moving away from
+using Dijets Node's keystore because it requires you to keep your keys on a full
+node which makes them a target for malicious hackers and a security concern.
+
+### Example Code
+
+Following files can be found under the
+[examples](https://github.com/Dijets-Inc/DijetsJs/tree/master/examples)
+directory of DijetsJs project.
+
+| Transfer From >> To      | Export                                                                                                                                  | Import                                                                                                                                    |
+| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| **_Value Chain >> Utility Chain_** | [**Value Chain: Export DJTX to Utility Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildExportTx-cchain-djtx.ts)   | [**Utility Chain : Import DJTX from Value Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildImportTx-xchain.ts)        |
+| **_Value Chain >> Method Chain_** | [**Value Chain : Export DJTX to Method Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildExportTx-PChain.ts)        | [**Method Chain : Import DJTX from Value Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/platformvm/buildImportTx-XChain.ts) |
+| **_Method Chain >> Value Chain_** | [**Method Chain : Export DJTX to Value Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/platformvm/buildExportTx-XChain.ts) | [**Value Chain : Import DJTX from Method Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildImportTx-PChain.ts)        |
+| **_Method Chain >> Utility Chain_** | [**Method Chain : Export DJTX to Utility Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/platformvm/buildExportTx-CChain.ts) | [**Utility Chain : Import DJTX from Method Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildImportTx-PChain.ts)        |
+| **_Utility Chain >> Value Chain_** | [**Utility Chain : Export DJTX to Value Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildExportTx-xchain-djtx.ts)   | [**Value Chain : Import DJTX from Utility Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildImportTx-cchain.ts)        |
+| **_Utility Chain >> Method Chain_** | [**Utility Chain : Export DJTX to Method Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildExportTx-pchain.ts)        | [**Method Chain : Import DJTX from Utility Chain**](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/platformvm/buildImportTx-CChain.ts) |
+
+<Admonition type='info'>
+
+The naming convention in the file and directory names are:
+
+AVM is for Value Chain, EVM for Utility Chain, and PlatformVM for Method Chain.
+
+</Admonition>
+
+### Transaction Fees
+
+Transaction fees are fixed on Value Chain and Method Chain, while dynamic yet (extremely economical) on Utility Chain. When transferring
+tokens on Utility Chain, please take fee into consideration in calculating total amount to be
+transferred.
+
+## Testnet Workflow
+
+This tutorial uses [Value Chain to Utility Chain](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildExportTx-cchain-djtx.ts)
+transfers as an example. Transferring between other chains are very similar processes.
+
+### Transfer from the Value Chain to the Utility Chain
+
+To transfer a specified amount of tokens from Value Chain to Utility Chain, the token needs to
+be first exported from the Value Chain to the atomic memory, from where it is then
+imported into the Utility Chain.
+
+#### Export DJTX From Value Chain to Utility Chain
+
+Select the
+[**`examples/avm`**](https://github.com/Dijets-Inc/dijetsJs/tree/master/examples/avm)
+folder to view the DijetsJS Value Chain examples. To export DJTX from the Value Chain
+to the Utility Chain, select
+[`avm/buildExportTx-cchain-djtx.ts`](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildExportTx-cchain-djtx.ts).
+
+##### Private Key
+
+Locate this line in the file
+
+```js
+const privKey: string = `${PrivateKeyPrefix}${DefaultLocalGenesisPrivateKey}`
+```
+
+and replace this with a private key that you control.
+
+```js
+const privKey: string = "<YOUR-PRIVATE-KEY-HERE>"
+```
+
+##### Network Setting
+
+The following settings work when using a local node started with [`--network-id=testnet`](../nodes/maintain/dijetsnodego-config-flags.md#network-id):
+
+```js
+const ip: string = "localhost"
+const port: number = 9650
+const protocol: string = "http"
+const networkID: number = 5
+```
+
+However, to connect directly to the [Dijets Testnet API
+server](../apis/dijetsnodego/public-api-server.md), the following changes are
+needed:
+
+```js
+const ip: string = "testnet.dijets.io"
+const port: number = 443
+const protocol: string = "https"
+const networkID: number = 5
+```
+
+Depending on the networkID passed in when instantiating Dijets, the encoded
+addresses used will have a distinctive Human Readable Part(HRP) per each
+network.
+
+_Example Address: 5 - X-`test`19rknw8l0grnfunjrzwxlxync6zrlu33yxqzg0h_
+
+For Dijets Testnet, 4 is the correct value to use.
+
+```js
+const networkID: number = 4
+```
+
+**Set the Correct Amount To Send:**
+
+By default the scripts send the wallet's entire DJTX balance:
+
+```js
+const balance: BN = new BN(getBalanceResponse.balance)
+const amount: BN = balance.sub(fee)
+```
+
+To send a different amount, please replace the code above with the following.
+Below sets a new value of 0.01 DJTX (`10000000` Gwei). Value is set in Gwei
+format where `1,000,000,000` Gwei = 1 DJTX
+
+```js
+const value: BN = new BN("10000000")
+const amount: BN = value.sub(fee)
+```
+
+Run the export script:
+
+```sh
+ts-node examples/avm/buildExportTx-cchain-djtx.ts
+```
+
+This returns:
+
+```sh
+Success! TXID: 2uQvMcPZjmPXAyvz9cdKBphDDSmnxxx3vsUrxqpj3U92hsfQcc
+```
+
+#### Verify the Transaction
+
+You can now pass this txID `2uQvMcPZjmPXAyvz9cdKBphDDSmnxxx3vsUrxqpj3U92hsfQcc`
+into
+[examples/avm/getTx.ts](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/getTx.ts),
+plus other similar network settings, then you can run
+
+```zsh
+ts-node examples/avm/getTx.ts
+```
+
+which returns:
+
+```js
+{
+  unsignedTx: {
+    networkID: 5,
+    blockchainID: '2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm',
+    outputs: [ [Object] ],
+    inputs: [ [Object], [Object] ],
+    memo: '0x41564d207574696c697479206d6574686f64206275696c644578706f7274547820746f206578706f7274204156415820746f2074686520432d436861696e2066726f6d2074686520582d436861696e',
+    destinationChain: 'yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp',
+    exportedOutputs: [ [Object] ]
+  },
+  credentials: [
+    {
+      fxID: 'spdxUxVJQbX85MGxMHbKw1sHxMnSqJ3QBzDyDYEP3h6TLuxqQ',
+      credential: [Object]
+    },
+    {
+      fxID: 'spdxUxVJQbX85MGxMHbKw1sHxMnSqJ3QBzDyDYEP3h6TLuxqQ',
+      credential: [Object]
+    }
+  ]
+}
+```
+
+#### Import the DJTX Token From Value Chain to Utility Chain
+
+Select the
+[**`examples/evm`**](https://github.com/Dijets-Inc/dijetsJs/tree/master/examples/evm)
+folder to view the DijetsJS Utility Chain examples. To import DJTX to the Utility Chain
+from the Value Chain, select
+[`evm/buildImportTx-xchain.ts`](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildImportTx-xchain.ts)
+
+Copy the [network setting from above](#network-setting) into `evm/buildImportTx-xchain.ts`.
+
+Navigate to this part of the code and ensure that the `cHexAddress`(_Your
+Utility Chain wallet address_) and `private key` are correct:
+
+```ts
+const cHexAddress: string = "<YOUR-CCHAIN-WALLET-ADDRESS-HERE>"
+const privKey: string = "<YOUR-PRIVATE-KEY-HERE>"
+```
+
+Run the import script:
+
+```sh
+ts-node examples/evm/buildImportTx-xchain.ts
+```
+
+This returns:
+
+```sh
+Success! TXID: 2uQvMcPZjmPXAyvz9cdKBphDDSmnxxx3vsUrxqpj3U92hsfQcc
+```
+
+A "Success" message with a Transaction ID signifies the completion of a transfer! You've transferred DJTX from the Value Chain to Utility Chain!
+
+### Transfer from the Utility Chain to the Value Chain
+
+To return the DJTX back to the Value Chain, you need to do the transfer in the opposite direction.
+
+#### Export the DJTX Token From Utility Chain to Value Chain
+
+Select the
+[**`examples/evm`**](https://github.com/Dijets-Inc/dijetsJs/tree/master/examples/evm)
+folder to view the DijetsJS Utility Chain examples. To export DJTX from the Value Chain
+to the Utility Chain, select
+[`evm/buildExportTx-xchain-djtx.ts`](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/evm/buildExportTx-xchain-djtx.ts).
+
+Make necessary changes as above for private key and network settings.
+
+You can change the amount of DJTX to send by editing the _BN_ variable:
+`djtxAmount`. The sample code assigns this as `1e7` or `10000000` (0.01 DJTX)
+
+The fee here will only be for exporting the asset. The import fees will be
+deducted from the UTXOs present on the Exported Atomic Memory, a memory location
+where UTXOs stay after getting exported but before being imported.
+
+```ts
+let djtxAmount: BN = new BN(1e7)
+let fee: BN = baseFee.div(new BN(1e9))
+fee = fee.add(new BN(1e6))
+```
+
+Run the export script:
+
+```zsh
+dijetsjs $ ts-node examples/evm/buildExportTx-xchain-djtx.ts
+Success! TXID: UAez3DTv26qmhKKFDvmQTayaXTPAVahHenDKe6xnUMhJbKuxc
+```
+
+#### Import the DJTX Token From Utility Chain to Value Chain
+
+Before we run the [example import
+script](https://github.com/Dijets-Inc/dijetsJs/blob/master/examples/avm/buildImportTx-cchain.ts),
+we need to make some changes to the code:
+
+1. Change the [Network Setting](#network-setting) to meet Dijets Testnet network requirements.
+2. Import your Private Key by following the steps listed [here](#private-key).
+3. Run the Script!
+
+```zsh
+dijetsjs $ ts-node examples/avm/buildImportTx-cchain.ts
+Success! TXID: Sm6Ec2GyguWyG3Li1pARmTpaZ6qLEPuVAHV8QBGL9JWwWAEgM
+```
+
+## Mainnet Workflow
+
+Dijets Testnet workflow above can be adapted to Mainnet with the following modifications:
+
+- The correct private key.
+- Network setting should be to a Mainnet node, either [a local node on
+  Mainnet](../nodes/maintain/dijetsnodego-config-flags.md#network-id) or
+  [Dijets Mainnet API
+  server](../apis/dijetsnodego/public-api-server.md#using-the-public-api-nodes)
+  where `dijets.ukwest.cloudapp.azure.com` should be used for the `ip`.
+- `const networkID: number = 1` based on [this](../apis/dijetsjs/manage-value-chain-keys.md#encode-bech32-addresses).
+- Set the correct amount to send.
+- The correct receiving address.
+
+## Local Workflow
+
+### Start the Local Network
+
+Follow [Create a Local Test
+Network](../quickstart/create-a-local-test-network.md#dijets-up)
+to start a 5-node local network. Make sure that you get one of the port number
+by following
+[this](../quickstart/create-a-local-test-network.md#retrieve-all-nodes). In this
+tutorial, we will assume one of the ports is 30301.
+
+### Locate the Example Code and Make Necessary Changes
+
+Most of the code are already set to run it on a local network. Do check the
+following values to make sure they are correct.
+
+```js
+const ip: string = "localhost"
+const port: number = 30301 // Change this to the correct value
+const protocol: string = "http"
+const networkID: number = 1337
+```
+
+Then run the export and import scripts to transfer tokens across chains.
+## Next steps
+
+At this stage you have a fully functional application!
+
+- Got a question? [Ask here](https://github.com/supabase/supabase/discussions).
+- Sign in: [app.supabase.com](https://app.supabase.com)
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

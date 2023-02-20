@@ -1,0 +1,302 @@
+import Layout from '~/layouts/DefaultLayout'
+import Link from 'next/link'
+import { GlassPanel, IconPanel, Button, IconChevronRight } from 'ui'
+
+export const meta = {
+  id: 'getting-started',
+  title: 'Launch Your Ethereum Dapp on Dijets Utility Chain',
+  description: 'Learn more about deploying or porting over your DApp to Dijets Utility Chain from Ethereum',
+}
+
+The purpose of this document is to help you with launching and/or porting an existing dapp running on
+Ethereum to Dijets Utility Chain. It contains a series of resources designed to help you get the basics
+of:
+
+1. How Dijets Utility Chain runs. 
+1. How to connect to Dijets ternary chains specifically the Utility Chain.
+1. How to use your favourite tools & environments in developing and deploying on Dijets.
+1. Key differentiators between Dijets Utility Chain as an EVM and Ethereum.
+
+## Dijets - The Lightweight & Low-fee alternative to Ethereum
+
+Dijets is an extremely lightweight & versatile protocol built to bridge the gap between
+developers, enterprises and blockchain technology. It is a platform that provides the fundamentals upon which
+other platforms and blockchains can thrive and build on top. Dijets allows anyone to create 
+their own tailor-made & "Application Specific" blockchains. Each Blockchain in Dijets is an
+instance of a virtual machine just as the Utility Chain is an instance of Ethereum Vritual Machine. Custom VMs 
+can be deployed on a custom blockchain network, called a subnetwork, which consists of a dynamic set of validators all working 
+together to achieve consensus on (x)blockchains.
+
+Dijets is a heterogeneous network, that doesn't follow the convention of
+a single chain running a single, uniform blocks structure. Its comprised of
+multiple Subnetworks, each one of them in turn running one or more of their own heterogeneous child chains. 
+
+Dijets offers an extremely lightweight and low-cost alternative to Ethereum.
+If you are a developer who wishes to keep everything running the same as Ethereum but cut the costs
+significantly lower and almost negligible levels with the added benefit of having transaction finality of 
+less than one second than we invite you to try out Dijets for all its benefits 
+it brings to developers who share our vision for an open, more secure and fairer Web 3.0.
+
+## Accessing Dijets Utility Chain
+
+Dijets Utility Chain exposes the [same API](/docs/guides/node-apis/utility-chain-api) as
+`go-ethereum`, so you can use all the familiar APIs that are available on Ethereum
+for interaction with the platform.
+
+There are multiple ways of working with the Dijets Utility Chain.
+
+### With Decypher - Browser Extension
+
+Powered by Dijets Protocol,
+[Decypher]()
+is a Google Chrome browser extension that lets you interact with Dijets Utility Chain to its full extent.
+Users can not only make transfers, but swap assets and tokens, vote on proposals and much more from within their browsers.
+
+![Decypher Browser Extension](/docs/img/decy1.png)
+
+### Through MetaMask
+
+You can access Dijets Utility Chain through MetaMask, by defining a custom network. Go to
+MetaMask, log in, click the network dropdown, and select 'Custom RPC'. Data for
+Dijets Utility Chain is as follows.
+
+#### **Dijets Mainnet Settings:**
+
+- **Network Name**: Dijets Utility Chain
+- **New RPC URL**: https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc
+- **ChainID**: `98200`
+- **Symbol**: `DJTX`
+- **Explorer**: [https://utility-explorer.swedencentral.cloudapp.azure.com/](https://utility-explorer.swedencentral.cloudapp.azure.com/)
+
+In your application's web interface, you can [add Dijets
+programmatically](add-dijets-programmatically#metamask)
+so your users don't have to enter the network data manually.
+
+### Using the Public API Nodes
+
+Instead of proxying network operations through MetaMask, you can use the public
+API, which consists of a number of DijetsNodeGo nodes behind a load balancer.
+
+The Dijets Utility Chain API endpoint is
+[https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc](https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc)
+for the Mainnet.
+
+For more information, see [documentation](public-api).
+
+However, public API does not expose all the APIs that are available on the node,
+as some of them would not make sense on a publicly accessible service, and some
+would present a security risk. If you need to use an API that is not available
+publicly, you can always run your own node.
+
+## Running Your Own Node
+
+If you don't want your dapp to depend on a centralized service you don't
+control, or have specific needs that cannot be met through the public API, you
+can run your own node and access the network that way. Running your own node
+also avoids potential issues with public API congestion and rate-limiting.
+
+For development and experimental purposes,
+[here](/docs/guides/nodes/run-dijets-node-manually) is a tutorial that shows
+how to download, build, and install DijetsNodeGo.
+
+### Node Configuration
+
+Node configuration options are explained
+[here](/docs/guides/nodes/node-flags-configs). But unless you have
+specific needs, you can mostly leave the main node config options
+as they are on default.
+
+On the other hand, you will most likely need to adjust Dijets Utility Chain configuration to
+suit your intended use. You can look up complete configuration options for
+Dijets Utility Chain [here](/docs/guides/nodes/node-flags-configs#utility-chain-configs). 
+Note that only the options that are different from
+their default values need to be included in the config file.
+
+By default, the config file for Dijets Utility Chain is located at
+`$HOME/.dijetsnodego/configs/chains/utility-chain/config.json`. 
+This default location for the config file can also be changed by specifying the new location when
+starting up the node.
+
+#### Running an Archive Node
+
+An Archive Node stores and maintains the full blockchain data on disk and 
+and also builds an archive of historical states of the blockchain. The Archive Nodes 
+are useful when querying historical blockchain state and data that is not accessible on other nodes.
+
+If you need Ethereum [Archive
+Node](https://ethereum.org/en/developers/docs/nodes-and-clients/#archive-node)
+functionality, you need to disable a default feature flag in Dijets Utility Chain called **Pruning**
+To preserve the full historical state with your node, include
+`"pruning-enabled": false` in the Dijets Utility Chain config file.
+
+<Admonition type="info">
+
+Pruning is the process of erasing older data to save disk space. This feature is enabled
+by default in DijetsNodeGo and needs to be disabled by including `"pruning-enabled": false` in
+your config file.
+
+</Admonition>
+
+#### Running a Node in Debug Mode
+
+By default, debug APIs are disabled. To enable them, you need to enable the
+appropriate EVM APIs in the config file by including the `eth-apis` value in
+your Dijets Utility Chain config file.
+
+<Admonition type="info">
+
+To enable the debug APIs, the `debug`, `debug-tracer`, and
+`internal-debug` APIs all have to be enabled and included in your config file.
+
+</Admonition>
+
+#### Example Dijets Utility Chain Config File
+
+Here's an example of a Dijets Utility Chain config file that includes:
+
+1. The Archive Mode
+1. Debug APIs
+1. Default EVM APIs
+
+```json
+{
+  "eth-apis": [
+    "eth",
+    "eth-filter",
+    "net",
+    "web3",
+    "internal-eth",
+    "internal-blockchain",
+    "internal-transaction",
+    "debug-tracer"
+  ],
+  "pruning-enabled": false
+}
+```
+
+Default config values for the Dijets Utility Chain can be seen [here](/docs/guides/nodes/node-flags-configs#utility-chain-configs).
+
+### Running a Local Test Network
+
+[Dijets-Up](https://github.com/Dijets-Inc/dijets-up) was built specifically for the purpose of testing dapps and upgrades
+on a private test network before releasing on the Mainnet.
+Similar to the Ganache tool on Ethereum, Dijets-up lets you build and run private Dijets networks.
+
+## Developing and Deploying Contracts
+
+Dijets Utility Chain is a fully compatible Ethereum Blockchain which allows developers to continue using
+the same tools and environments they are familiar with to not only develop & deploy new DApps but also port
+their existing DApps over to Dijets Utility Chain without the hassle that comes with having to learn a whole new set of tools.
+
+### Remix
+
+You can use Remix with either Decypher or Metamask to deploy your smart contracts to Dijets Utility Chain.
+
+Follow this [tutorial]() to learn how.
+
+### Truffle
+
+You can also use Truffle exactly like you would on Ethereum to test and deploy smart contracts on Dijets Utility Chain. 
+
+Find out how in this [tutorial]().
+
+### Hardhat
+
+Hardhat is another well known testing environment tool for Solidity smart
+contracts, which is compatible with Dijets Utility Chain.
+
+[Click here](/docs/guides/developer-toolchains/using-hardhat-with-the-dijets-utility-chain.md) to learn how to use HardHat with Dijets.
+
+## Dijets Utility Chain Explorer
+
+An essential part of the smart contract development environment is the explorer,
+which indexes and serves blockchain data. Thanks to the amazing work done by the guys at
+BlockScout, [Dijets Utility Chain explorer]
+(https://utility-explorer.swedencentral.cloudapp.azure.com/) is the perfect tool 
+that lets you browse, analyse, query and confirm the transactions, validators, delegators, 
+assets and smart contracts activity on Dijets Utility Chain. The Explorer also exposes 
+the standard [Ethereum JSON RPC
+API](https://eth.wiki/json-rpc/API).
+
+## Dijets Faucet
+
+Dijets Faucet was built to providee users and developers with small amounts of Test Tokens
+for testing purposes. If you are a developer looking to test your DApp's functionality then
+you will need Dijets Test Tokens. These tokens have no monetary value and can only be used
+for testing DApps or trying out different features of Dijets Wallet when connected to the Testnet.
+
+[Dijets Faucet](https://faucet.dijets.io) sends a fixed amount of test tokens to the address of
+your choice. Simple paste your Dijets Utility Chain address when prompted and the test tokens will
+instantly be transferred into your wallet.
+
+## Contract Verification
+
+Smart contract verification is an important tool for developers that provides transparency 
+for users interacting with their
+smart contracts or DApps. When a developer publishes their source code to be verified,
+it allows everyone to attest to its functionality and usability. 
+
+The procedure to verify a smart contract on 
+[Dijets Utility Chain Explorer](https://utility-explorer.swedencentral.cloudapp.azure.com/) is as follows:
+
+- Search and navigate to your published contract address on the explorer
+- Look for the `Code` tab, select and then click `Verify & Publish`
+- You can choose several options here to verify your contract. The quickest &
+  the simplest way is to Copy and Paste the flattened source code and enter all the build parameters
+  exactly as they were used when publishing the contract.
+- Click `Verify & Publish`
+
+If successful, the `Code` tab will now have a green checkmark next to it. The checkmark 
+is a positive resffirmation to your users that they can trust your contract.
+
+See [this](/docs/guides/developer-toolchains/verify-smart-contracts-with-sourcify)
+for a detailed tutorial with Truffle.
+
+## Key Differentiators to Ethereum
+
+Dijets Utility Chain is an EVM-compatible chain, it should be noted that it
+is not an identical chain to Ethereum and has some key differentiators. Ignoring these
+can lead to inconsistencies and unstable DApp behaviour.
+
+Here are the main differences developers should be aware of when working with Dijets.
+
+### Time Measurement
+
+Ethereum uses consistent block times as a mechanism to measure time. Dijets on the
+other hand supports asynchronous block issuance with a production rate of 1 block every 2 seconds.
+Block production in Dijets is directly proportional to its demand i.e the greater the demand is the higher
+the block production rate is. If there is enough demand, a block can be produced earlier and if there
+is no demand, a block will not be produced until there are enough transactions for the
+network to process.
+
+Measuring the passage of time based on the number of blocks being produced will result
+in inaccurate timestamps and consequently the smart contracts can be open to
+manipulation by bad actors.
+
+Time in Dijets can simply be read by reading the timestamp attached to each produced block instead of 
+being measured by the block rate. Timestamps are accurate because they are guaranteed to 
+continue increasing and be within 30 seconds of the real time.
+
+### Finality
+
+**Ethereum blockchain can be reorganized and blocks can be orphaned even when the block has been accepted** 
+Unless the block in question is at least 6 places deep.
+You can not simply just rely on a block's finality Ethereum just because it has
+been accepted. A Block needs to be several blocks further away from the tip before 
+its considered final and accepted.
+
+Dijets has no grey areas as such. Blocks are gguaranteed to either be accepted or
+rejected within one to two seconds of submission. As soon as the block is accepted,
+in Dijets, it is confined within the ledger to the proverbial and literal point of no return zone. It is
+final, and cannot be replaced, manipulated, tampered, dropped, or modified in any way.
+That's also the reason why Dijets has no concept of `number of confirmations`.
+
+## Support
+
+For questions problems or topics deemed out of scope for this guide, please feel free to reach out to us on our 
+public support space on [Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org/). Drop in for a chat,
+or share with us what you plan on building on Dijets.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} hideToc={true} />
+
+export default Page

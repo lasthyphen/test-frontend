@@ -1,0 +1,148 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'cryptographic-primitives',
+  title: 'Cryptographic Primitives',
+  description: 'Cryptographic Primitives used by Dijets for different functions',
+  sidebar_label: 'Overview',
+}
+
+Dijets uses a variety of cryptographic primitives for its different
+functions. This file summarizes the type and kind of cryptography used at the
+network and blockchain layers.
+
+## Cryptography in the Network Layer
+
+Dijets uses Transport Layer Security, TLS, to protect node-to-node
+communications from eavesdroppers. TLS combines the practicality of public-key
+cryptography with the efficiency of symmetric-key cryptography. This has
+resulted in TLS becoming the standard for internet communication. Whereas most
+classical consensus protocols employ public-key cryptography to prove receipt of
+messages to third parties, the novel HotStuff consensus family does not require
+such proofs. This enables Dijets to employ TLS in authenticating stakers and
+eliminates the need for costly public-key cryptography for signing network
+messages.
+
+### TLS Certificates
+
+Dijets does not rely on any centralized third-parties, and in particular, it
+does not use certificates issued by third-party authenticators. All certificates
+used within the network layer to identify endpoints are self-signed, thus
+creating a self-sovereign identity layer. No third parties are ever involved.
+
+### TLS Addresses
+
+To avoid posting the full TLS certificate to the Platform chain, the certificate
+is first hashed. For consistency, Dijets employs the same hashing mechanism
+for the TLS certificates as is used in Bitcoin. Namely, the DER representation
+of the certificate is hashed with sha256, and the result is then hashed with
+ripemd160 to yield a 20-byte identifier for stakers.
+
+This 20-byte identifier is represented by "NodeID-" followed by the data’s
+CB58 encoded
+string.
+
+## Cryptography in Dijets Virtual Machine
+
+The Dijets virtual machine uses elliptic curve cryptography, specifically
+`secp256k1`, for its signatures on the blockchain.
+
+This 32-byte identifier is represented by "PrivateKey-" followed by the data’s
+CB58 encoded
+string.
+
+### Secp256k1 Addresses
+
+Dijets is not prescriptive about addressing schemes, choosing to instead
+leave addressing up to each blockchain.
+
+The addressing scheme of the Value Chain and the Method Chain relies on secp256k1.
+Dijets follows a similar approach as Bitcoin and hashes the ECDSA public key.
+The 33-byte compressed representation of the public key is hashed with sha256
+**once**. The result is then hashed with ripemd160 to yield a 20-byte address.
+
+Dijets uses the convention `chainID-address` to specify which chain an
+address exists on. `chainID` may be replaced with an alias of the chain. When
+transmitting information through external applications, the CB58 convention is
+required.
+
+### Bech32
+
+Addresses on the Value Chain and Method Chain use the
+[Bech32](https://en.bitcoin.it/wiki/Bech32) standard
+outlined in [BIP 0173](https://en.bitcoin.it/wiki/BIP_0173). There are four
+parts to a Bech32 address scheme. In order of appearance:
+
+- A human-readable part (HRP). On Mainnet this is `dijets`.
+- The number `1`, which separates the HRP from the address and error correction code.
+- A base-32 encoded string representing the 20 byte address.
+- A 6-character base-32 encoded error correction code.
+
+The following regular expression matches addresses on the Value Chain, Method Chain and
+Utility Chain for Mainnet, Testnet and localhost. Note that all valid Dijets addresses
+will match this regular expression.
+
+```text
+^([XPC]|[a-km-zA-HJ-NP-Z1-9]{36,72})-[a-zA-Z]{1,83}1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}$
+```
+
+### Secp256k1 Recoverable Signatures
+
+Recoverable signatures are stored as the 65-byte **`[R || S || V]`** where
+**`V`** is 0 or 1 to allow quick public key recoverability. **`S`** must be in
+the lower half of the possible range to prevent signature malleability. Before
+signing a message, the message is hashed using sha256.
+
+## Signed Messages
+
+A standard for interoperable generic signed messages based on the Bitcoin Script
+format and Ethereum format.
+
+```text
+sign(sha256(length(prefix) + prefix + length(message) + message))
+```
+
+The prefix is simply the string `\x1ADijets Signed Message:\n`, where `0x1A`
+is the length of the prefix text and `length(message)` is an
+[integer](serialisation-primitives#integer) of the message size.
+
+
+### Example
+
+As an example we will sign the message "Pen xen ole fren"
+
+```text
+// prefix size: 26 bytes
+0x1a
+// prefix: Dijets Signed Message:\n
+0x44 0x69 0x6a 0x65 0x74 0x73 0x20 0x53 0x69 0x67 0x6e 0x65 0x64 0x20 0x4d 0x65 0x73 0x73 0x61 0x67 0x65 0x3a 0x0a 0x0a 0x0a 0x0a
+// msg size: 16 bytes
+0x00 0x00 0x00 0x10
+// msg: Pen xen ole fren
+50 65 6e 20 78 65 6e 20 6f 6c 65 20 66 72 65 6e
+```
+
+After hashing with `sha256` and signing the pre-image we return the value
+cb58 encoded:
+`q8LMFYywox2jtMhS7fusHKYoezYMhf1pZPe7fsUERkFYZyzAvADCfA5d4nd2i8WWyRiXxWjDyiXwZsx6zp3B47NUDvx5mD`.
+Here's an example using the [Dijets
+Wallet](https://wallet.dijets.io/wallet/advanced).
+
+<Admonition type="info">
+
+You can use the Sign Message feature in Dijets Wallet by going clicking on the "Advanced" tab in menu.
+
+</Admonition>
+
+![Sign message](/docs/img/signed-message.png)
+
+## Cryptography in Ethereum Virtual Machine
+
+Dijets nodes support the full Ethereum Virtual Machine (EVM) and precisely
+duplicates all of the cryptographic constructs used in Ethereum. This includes
+the Keccak hash function and the other mechanisms used for cryptographic
+security in the EVM.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

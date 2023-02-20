@@ -1,0 +1,109 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'nodes-subnetwork-configs',
+  title: 'Subnetworkwork configuration',
+  description: "Getting started with Realtime's Postgres Changes feature",
+}
+
+# Subnetwork Configs
+
+It is possible to provide parameters for a Subnetwork. Parameters here apply to all
+chains in the specified Subnetwork.
+
+DijetsNodeGo looks for files specified with `{subnetID}.json` under
+`--subnetwork-config-dir` as documented
+[here](subnetwork-configs).
+
+Here is an example of Subnetwork config file:
+
+```json
+{
+  "validatorOnly": false,
+  "consensusParameters": {
+    "k": 25,
+    "alpha": 18
+  },
+  "appGossipNonValidatorSize": 10
+}
+```
+
+## Parameters
+
+### Private Subnetwork
+
+#### `validatorOnly` (bool)
+
+If `true` this node does not expose Subnetwork blockchain contents to non-validators
+via P2P messages. Defaults to `false`.
+
+Dijets Subnetworks are public by default. It means that every node can sync and
+listen ongoing transactions/blocks in Subnetworks, even they're not validating the
+listened Subnetwork.
+
+Subnetwork validators can choose not to publish contents of blockchains via this
+configuration. If a node sets `validatorOnly` to true, the node exchanges
+messages only with this Subnetwork's validators. Other peers will not be able to
+learn contents of this Subnetwork from this node.
+
+:::tip
+
+This is a node-specific configuration. Every validator of this Subnetwork has to use
+this configuration in order to create a full private Subnetwork.
+
+:::
+
+#### `proposerMinBlockDelay` (duration)
+
+As one of the ways to control network congestion, new blocks
+only call the `proposerMinBlockDelay` after the parent block's timestamp. Some
+high-performance custom VM may find this too strict. This flag allows tuning the
+frequency at which blocks are built.
+
+### Consensus Parameters
+
+Subnetwork configs supports loading new consensus parameters. JSON keys are
+different from their matching `CLI` keys. These parameters must be grouped under
+`consensusParameters` key.
+
+| CLI Key                             | JSON Key            |
+| :----------------------------- | :----------------------- |
+|   sample-size                  | k                        |
+|   quorum-size                  | alpha                    |
+|   virtuous-commit-threshold    | `betaVirtuous`           |
+|   rogue-commit-threshold       | `betaRogue`              |
+|   concurrent-repolls           | concurrentRepolls        |
+|   optimal-processing           | `optimalProcessing`      |
+|   max-processing               | maxOutstandingItems      |
+|   max-time-processing          | maxItemProcessingTime    |
+|   mixed-query-num-push-vdr     | mixedQueryNumPushVdr     |
+|   mixed-query-num-push-non-vdr | mixedQueryNumPushNondVdr |
+|   dijets-batch-size            | `batchSize`              |
+|   dijets-num-parents           | `parentSize`             |
+
+### Gossip Configs
+
+It's possible to define different Gossip configurations for each Subnetwork without
+changing values for Primary Network. For example in Primary Network transaction
+mempools are not gossiped to non-validators
+(`--consensus-app-gossip-non-validator-size` is `0`). You can change this for
+your Subnetwork and share mempool with non-validators as well. JSON keys of these
+parameters are different from their matching `CLI` keys. These parameters
+default to the same values used for the Primary Network. For more information
+see [CLI Gossip Configs](node-flags-configs#gossiping).
+
+| CLI Key                                                 | JSON Key                               |
+| :------------------------------------------------------ | :------------------------------------- |
+| --consensus-accepted-frontier-gossip-validator-size     | gossipAcceptedFrontierValidatorSize    |
+| --consensus-accepted-frontier-gossip-non-validator-size | gossipAcceptedFrontierNonValidatorSize |
+| --consensus-accepted-frontier-gossip-peer-size          | gossipAcceptedFrontierPeerSize         |
+| --consensus-on-accept-gossip-validator-size             | gossipOnAcceptValidatorSize            |
+| --consensus-on-accept-gossip-non-validator-size         | gossipOnAcceptNonValidatorSize         |
+| --consensus-on-accept-gossip-peer-size                  | gossipOnAcceptPeerSize                 |
+| --consensus-app-gossip-validator-size                   | appGossipValidatorSize                 |
+| --consensus-app-gossip-non-validator-size               | appGossipNonValidatorSize              |
+| --consensus-app-gossip-peer-size                        | appGossipPeerSize                      |
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

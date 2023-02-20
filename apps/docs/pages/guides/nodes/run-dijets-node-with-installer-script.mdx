@@ -1,0 +1,345 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'nodes-run-dijets-node-with-installer-script',
+  title: 'Postgres Changes',
+  description: "Getting started with Realtime's Postgres Changes feature",
+}
+
+# Run a Dijets Node Using the Install Script
+
+The installer script is a shell (bash) script that installs DijetsNodeGo on your computer. This
+script sets up full, running node in a matter of minutes with minimal user input
+required.
+
+This installer script assumes that:
+
+- DijetsNodeGo is not running and not already installed as a service
+- User running the script has superuser privileges (can run `sudo`)
+
+### Environment Considerations
+
+This script has primarily been developed for and tested for Ubuntu 20.04 upwards.
+If you run a different flavor of Linux than the script might not work as intended.
+It assumes `systemd` is used to run system services. Other Linux flavors might
+use something else, or might have files in different places than is assumed by
+the script. 
+
+#### Node Running from Terminal
+
+If you already have a Dijets node running in a terminal stop it by pressing `ctrl+C`.
+
+#### Node Running as a Service
+
+If your node is already running as a service, then you probably don't need this
+script. You're already good to go.
+
+#### Node Running in the Background
+
+If your node is running in the background (by running with `nohup`, for example)
+then find the process running the node by running `ps aux | grep dijets`.
+This will produce output like:
+
+```text
+ubuntu  2409  0.0  0.0   2828   676 pts/1    S+   19:54   0:00 grep dijets
+ubuntu  1189 26.1  9.4 2459236 753316 ?      Sl   Dec02 1220:52 /home/ubuntu/build/dijetsnodego
+```
+
+Look for line that doesn't have `grep` on it. In this example, that is the
+second line. It shows information about your node. Note the process id, in this
+case, `1189`. Stop the node by running `kill -2 1189`.
+
+#### Node Working Files
+
+If you previously ran a DijetsNodeGo node on this computer, you will have local
+node files stored in `$HOME/.dijetsnodego` directory. Those files will not be
+disturbed, and node set up by the script will continue operation with the same
+identity and state it had before. That being said, for your node's security,
+back up any private keys for staking, found in
+`$HOME/.dijetsnodego/staking` folder and store them somewhere secure. You can use those
+files to recreate your node on a different computer if you ever need to. Check
+out the tutorial on [Node Backup](node-backup-and-restore) for backup and
+restore procedure.
+
+### Networking Considerations
+
+To run successfully, DijetsNodeGo needs to accept connections from the Internet
+on the network port `9651`. Before you proceed with the installation, you need
+to determine the networking environment your node will run in.
+
+#### Running on a Cloud Provider
+
+If your node is running on a cloud provider computer instance, it will have a
+static IP. Find out what that static IP is, or set it up if you haven't done so already.
+The script will try to find out the IP by itself, but that might not work in all
+environments, so you will need to check the IP or enter it yourself.
+
+#### Running on a Home Connection
+
+If you're running a node on a computer that is on a residential internet
+connection, then you more than likely have a dynamic IP; that is, your IP will change periodically.
+The install script will configure the node appropriately for that situation.
+But, for a home connection, you will need to set up inbound port forwarding of
+port `9651` from the internet to the computer the node is installed on.
+
+Alternatively you can ask your ISP to provide you with a static IP.
+
+<Admonition type="caution">
+
+Please note that a fully connected Dijets node maintains and communicates
+over a couple of thousand of live TCP connections. For some low-powered and
+older home routers that might be too much to handle. If that is the case you may
+experience lagging on other computers connected to the same router, node getting
+benched, failing to sync and similar issues.
+
+</Admonition>
+
+## Running the Script
+
+To download and run the script, enter the following in the terminal:
+
+```bash
+wget -nd -m https://raw.githubusercontent.com/Dijets-Inc/dijets-terraform-construct/master/installer/dijets-installer.sh;\
+chmod 755 dijets-installer.sh;\
+./dijets-installer.sh
+```
+
+The above commands start the Node installation process. The output should look something like this:
+
+```text
+DijetsNodeGo installer
+---------------------
+Preparing environment...
+Found arm64 architecture...
+Looking for the latest arm64 build...
+Will attempt to download:
+ https://github.com/Dijets-Inc/dijetsnodego/releases/download/v1.1.1/dijetsnodego-linux-arm64-v1.1.1.tar.gz
+dijetsnodego-linux-arm64-v1.1.1.tar.gz 100%[=========================================================================>]  29.83M  75.8MB/s    in 0.4s
+2020-12-28 14:57:47 URL:https://github-production-release-asset-2e65be.s3.amazonaws.com/246387644/f4d27b00-4161-11eb-8fb2-156a992fd2c8?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20201228%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201228T145747Z&X-Amz-Expires=300&X-Amz-Signature=ea838877f39ae940a37a076137c4c2689494c7e683cb95a5a4714c062e6ba018&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=246387644&response-content-disposition=attachment%3B%20filename%3Ddijetsnodego-linux-arm64-v1.1.1.tar.gz&response-content-type=application%2Foctet-stream [31283052/31283052] -> "dijetsnodego-linux-arm64-v1.1.1.tar.gz" [1]
+Unpacking node files...
+dijetsnodego-v1.1.1/plugins/
+dijetsnodego-v1.1.1/plugins/evm
+dijetsnodego-v1.1.1/dijetsnodego
+Node files unpacked into /home/ubuntu/dijets-node
+```
+
+And then the script will prompt you for information about the network environment:
+
+```text
+To complete the setup some networking information is needed.
+Where is the node installed:
+1) residential network (dynamic IP)
+2) cloud provider (static IP)
+Enter your connection type [1,2]:
+```
+
+Enter `1` if you have a dynamic IP, and `2` if you have a static IP. 
+
+<Admonition type="info">
+  If you are on
+a static IP, the installer script will try to auto-detect the IP and ask for confirmation.
+</Admonition>
+
+```text
+Detected '2.16.168.14' as your public IP. Is this correct? [y,n]:
+```
+
+Confirm with `y`, or `n` if the detected IP is wrong (or empty), and then enter
+the correct IP at the next prompt.
+
+Next, you have to set up RPC port access for your node. Those are used to query
+the node for its internal state, to send commands to the node, or to interact
+with the platform and its chains (sending transactions, for example). You will
+be prompted with:
+
+```text
+Do you want the RPC port to be accessible to any or only local network interface? [any, local]:
+```
+
+`local` This setting only allows RPC requests from the node machine itself.
+`any` This setting allows you to send RPC requests to your node
+from a remote machine. 
+
+The script will then continue with system service creation and finish with starting the service:
+
+```text
+Created symlink /etc/systemd/system/multi-user.target.wants/dijetsnodego.service → /etc/systemd/system/dijetsnodego.service.
+
+Done!
+
+Your node should now begin the bootstrapping process where it tries to catch up to the latest block in the chain.
+Node configuration file is /home/ubuntu/.dijetsnodego/configs/node.json
+Utility Chain configuration file is /home/ubuntu/.dijetsnodego/configs/chains/UC/config.json
+To check that the service is running use the following command (q to exit):
+sudo systemctl status dijetsnodego
+To follow the log use (ctrl-c to stop):
+sudo journalctl -u dijetsnodego -f
+
+Reach us over on [Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org/) if you're having problems.
+```
+
+## Post Installation
+
+DijetsNodeGo should be running in the background as a service. You can check that it's running with:
+
+```bash
+sudo systemctl status dijetsnodego
+```
+
+This will print the node's latest logs, which should look like this:
+
+```text
+● dijetsnodego.service - DijetsNodeGo systemd service
+Loaded: loaded (/etc/systemd/system/dijetsnodego.service; enabled; vendor preset: enabled)
+Active: active (running) since Tue 2021-01-05 10:38:21 UTC; 51s ago
+Main PID: 2142 (dijetsnodego)
+Tasks: 8 (limit: 4495)
+Memory: 223.0M
+CGroup: /system.slice/dijetsnodego.service
+└─2142 /home/ubuntu/dijets-node/dijetsnodego --dynamic-public-ip=opendns --http-host=
+```
+
+Note the `active (running)` which indicates the service is running OK. You may
+need to press `q` to return to the command prompt.
+
+To find out your NodeID, which is used to identify your node to the network, run the following command:
+
+```bash
+sudo journalctl -u dijetsnodego | grep "NodeID"
+```
+
+It will produce output like:
+
+```text
+Jan 05 10:38:38 ip-172-31-30-64 dijetsnodego[2142]: INFO [01-05|10:38:38] dijetsnodego/node/node.go#428: Set node's ID to 7S2JhkGp7yKPzwpfd7KNwcM217ZuMzPFT
+```
+
+Prepend `NodeID-` to the value you get, for example,
+`NodeID-7S2JhkGp7yKPzwpfd7KNwcM217ZuMzPFT`. Store that; it will be needed for
+staking or looking up your node.
+
+## Stopping the Node
+
+To stop DijetsNodeGo, run:
+
+```bash
+sudo systemctl stop dijetsnodego
+```
+
+To start it again, run:
+
+```bash
+sudo systemctl start dijetsnodego
+```
+
+## Advanced Node Configuration
+
+Without any additional arguments, the script installs the node in a most common
+configuration. But the script also enables various advanced options to be
+configured, via the command line prompts. Following is a list of advanced
+options and their usage:
+
+- `admin` - [Admin API](/docs/node-apis/admin-api) will be enabled
+- `archival` - disables database pruning and preserves the complete transaction history
+- `state-sync` - if `on` state-sync for the Utility Chain is used, if `off` it will
+  use regular transaction replay to bootstrap; state-sync is much faster, but
+  has no historical data
+- `db-dir` - used to provide the full path to the location where the database
+  will be stored
+- `testnet` - node will connect to Dijets testnet instead of the Mainnet
+- `index` - [Index API](/docs/node-apis/index-api) will be
+  enabled
+- `ip` - use `dynamic`, `static` arguments, of enter a desired IP directly to be
+  used as the public IP node will advertise to the network
+- `rpc` - use `any` or `local` argument to select any or local network interface
+  to be used to listen for RPC calls
+
+Please note that configuring `index` and `archival` options on an existing node
+will require a fresh bootstrap to recreate the database.
+
+Complete script usage can be displayed by entering:
+
+```bash
+./dijets-installer.sh --help
+```
+
+### Unattended Installation
+
+If you want to use the script in an automated environment where you cannot enter
+the data at the prompts you must provide at least the `rpc` and `ip` options.
+For example:
+
+```bash
+./dijetsnodego-installer.sh --ip 1.2.3.4 --rpc local
+```
+
+### Usage Examples
+
+To run a Mainnet node with indexing enabled and autodetected static IP:
+
+```bash
+./dijetsnodego-installer.sh --mainnet --ip static --index
+```
+
+To run an archival Mainnet node with dynamic IP and database located at `/home/node/db`:
+
+```bash
+./dijetsnodego-installer.sh --archival --ip dynamic --db-dir /home/node/db
+```
+
+To use Utility Chain state-sync to quickly bootstrap a Mainnet node, with dynamic IP and local RPC only:
+
+```bash
+./dijetsnodego-installer.sh --state-sync on --ip dynamic --rpc local
+```
+
+## Node Configuration
+
+File that configures node operation is `~/.dijetsnodego/configs/node.json`. You
+can edit it to add or change configuration options. The documentation of
+configuration options can be found
+[here](node-flags-configs). Configuration may look like
+this:
+
+```json
+{
+  "dynamic-public-ip": "opendns",
+  "http-host": ""
+}
+```
+
+Note that configuration file needs to be a properly formatted `JSON` file, so
+switches are formatted differently than for command line, so don't enter options
+like `--dynamic-public-ip=opendns` but as in the example above.
+
+Script also creates an empty Utility Chain config file, located at
+`~/.dijetsnodego/configs/chains/UC/config.json`. By editing that file you can
+configure the Utility Chain. Click
+[here](chain-config-flags) to read about the chain configuration for Utility Chain.
+
+
+## What Next?
+
+That's it, you're running a Dijets node! Congratulations! Let us know how it
+went on our [Twitter](https://twitter.com/OfficialDijets)
+
+If you have any questions, or need help, feel free to contact us on Dijets public support space on
+[Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org)
+
+Feel free to [interact with your
+node](node-apis/issuing-api-calls), [stake your
+dijets](staking), learn more about validators/delegators and how you can help
+secure the network and [earn DJTX](validator-nodes) or check your node's health by calling
+[Healthcheck APIs](health-api) to get a better
+insight into how your node is doing. 
+
+If you just want to issue commands to a Dijets Node and haven't gotten around to setting
+up your own node, you can always use our [Postman
+Collection](/docs/postman-api) to issue API calls directly through the postman app or in your browser.
+
+Finally, if you haven't already, it is always good practice to [back
+up](node-backup-and-restore) your files in case of a major issue or if you plan on changing your host machine.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

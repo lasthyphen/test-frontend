@@ -1,0 +1,360 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+import RefDetailCollapse from '~/components/reference/RefDetailCollapse'
+
+export const meta = {
+  id: 'funding-test-accounts',
+  title: 'Fund Accounts on Local Dijets Network',
+  description: 'How to fund accounts on local Dijets Network.',
+  sidebar_label: 'Test Accounts',
+}
+
+### Prerequisites:
+
+1. You are familiar with Dijets Ternary Chain Ledger System & Architecture.
+
+1. You have completed the tutorial for "How to run a Dijets Node"
+
+1. You have completed the tutorial for ["Create a Local Dijets Network"](create-local-network)
+
+1. You have Go language installed on your system with $GOBIN set to be [in your path.](/docs/guides/getting-started/tutorials/funding-test-accounts#setting-bin-in-your-path)
+
+
+# Fund a Local Test Network
+
+## Introduction
+
+In [Create a Local Test Network](create-local-network), you learnt
+how to launch a 5 node local test network. Once you have a local network the
+next step is to fund an address so that you can begin creating transactions and
+interacting with smart-contracts on the said network.
+
+This guide will show you how to leverage a pre-funded private key to access funds on the Value, Utility & Method Chains running in the local network you created.
+
+<Admonition type="note">
+
+This private key,
+`PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN`, can be used to
+sign transactions locally using [DijetsJS](../getting-started/tutorials//README.md).
+You don't need to import the key into the local keystore in order to access
+those funds. They are in the genesis vertex and block for each respective chain.
+
+The port in this tutorial uses 9650 as default. Depending on how you choose to start your local network
+port numbers could vary each time.
+
+</Admonition>
+
+<Admonition type="caution">
+
+Only create a keystore user on a node that you have full access to and one
+that you can operate. If that node is breached, you could lose all your tokens.
+This tutorial makes calls to the Keystore APIs which is not recommended to be used 
+with Dijets Mainnet.
+
+</Admonition>
+
+## Create a User
+
+<Admonition type="tip">
+You can skip this step if you are only interested in checking your balance on any of the Value, Utility or Method Chains.
+</Admonition>
+
+
+Typically an account address in a network has a balance that was assigned to it either through the genesis block or through transferring from another account.
+
+For the purpose of this guide, we will use an existing Private Key with a pre-funded address and a balance associated with it. This key
+`PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN` and its address was assigned a balance during the genesis block of a test network
+just like the one you started previously and the one we are currently using for this tutorial.
+
+To use the key and the balance in it, we must first create a user by making a call to the Keystore API of our locally running Dijets Node.
+
+Run
+[`keystore.createUser`](#keystorecreateuser)
+to create a user in the local keystore.
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/keystore' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"keystore.createUser",
+    "params" :{
+        "username": "PenXenOleFren",
+        "password": "password"
+    }
+}'
+```
+
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "success": true
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+
+Now that you have created a user, you can import the prefunded private key
+`PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN`, into
+any of the 3 blockchains. After importing the key you can
+check the balance to confirm that it worked.
+
+## Importing the Prefunded Key into the Value Chain
+
+### Import Key
+
+You can import the prefunded `PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN` into the Value Chain by calling 
+the [avm.importKey API](#avmimportkey).
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/bc/X' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avm.importKey",
+    "params" :{
+        "username": "PenXenOleFren",
+        "password": "password",
+        "privateKey":"PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN"
+    }
+}'
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "address": "X-local18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p"
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+
+### Check the Value Chain Balance
+
+Confirm that the `X-local18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p` address now has a
+balance of 300m DJTX on the Value Chain.
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/bc/X' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "jsonrpc":"2.0",
+  "id"     : 1,
+  "method" :"avm.getBalance",
+  "params" :{
+      "address":"X-local18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p",
+      "assetID": "DJTX"
+  }
+} '
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "balance": "300000000000000000",
+        "utxoIDs": [
+            {
+                "txID": "BUuypiq2wyuLMvyhzFXcPyxPMCgSp7eeDohhQRqTChoBjKziC",
+                "outputIndex": 1
+            }
+        ]
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+
+## Utility Chain
+
+### Import Key
+
+You can import the prefunded `PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN` into the Utility Chain by calling 
+the [djtx.importKey API](#avmimportkey).
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/bc/C/djtx' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "method": "djtx.importKey",
+    "params": {
+        "username": "PenXenOleFren",
+        "password": "password",
+        "privateKey":"PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN"
+    },
+    "jsonrpc": "2.0",
+    "id": 1
+}'
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "address": "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC"
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+
+### Check the Utility Chain Balance
+
+Confirm the `0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC` address has a balance
+of 50m (0x295be96e64066972000000 in hex) DJTX on the Utility Chain.
+
+```text
+curl --location --request POST 'localhost:9650/ext/bc/C/rpc' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": [
+        "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC",
+        "latest"
+    ],
+    "id": 1
+}'
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x295be96e64066972000000"
+}
+```
+</RefDetailCollapse>
+
+### Integrate with MetaMask
+
+To see this account on MetaMask, follow these steps:
+
+- Set up MetaMask by using the info below:
+
+  - **Network Name**: Dijets Local UC
+  - **New RPC URL**: [http://127.0.0.1:9650/ext/bc/C/rpc](http://127.0.0.1:9650/ext/bc/C/rpc)
+  - **ChainID**: `90901`
+  - **Symbol**: `DJTX`
+
+- Create a new account by importing the private key
+  `0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027` on
+  MetaMask
+
+
+!["Importing an Account in Metamask"](/docs/img/mm-import-account.png)
+
+- Now you can see the balance of this newly created account on Dijets Local Network
+
+!["Local pre-funded account"](/docs/img/pre-funded-account.png)
+
+## Method Chain
+
+### Import Key
+
+You can import the prefunded `PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN` into the Utility Chain by calling 
+the [platform.importKey API](#avmimportkey).
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/bc/P' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"platform.importKey",
+    "params" :{
+        "username": "PenXenOleFren",
+        "password": "password",
+        "privateKey":"PrivateKey-ewoqjP7PxY4yr3iLTpLisriqt94hdyDFNgchSxGGztUrTXtNN"
+    }
+}'
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "address": "P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p"
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+
+### Check Method Chain Balance
+
+Confirm the `P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p` address has a
+balance of 30m DJTX on the Method Chain. 20m should be unlocked and 10m locked and
+stakeable.
+
+```text
+curl --location --request POST '127.0.0.1:9650/ext/bc/P' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"platform.getBalance",
+    "params" :{
+      "address":"P-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p"
+    }
+}'
+```
+<RefDetailCollapse
+    label="Response"
+    defaultOpen={false}
+>
+```text
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "balance": "30000000000000000",
+        "unlocked": "30000000000000000",
+        "lockedStakeable": "0",
+        "lockedNotStakeable": "0",
+        "utxoIDs": [
+            {
+                "txID": "11111111111111111111111111111111LpoYY",
+                "outputIndex": 0
+            },
+            {
+                "txID": "11111111111111111111111111111111LpoYY",
+                "outputIndex": 1
+            }
+        ]
+    },
+    "id": 1
+}
+```
+</RefDetailCollapse>
+You can visit Dijets Wallet, add a custom network and the prefunded private key from above, to
+check the balance of all three of the Value, Utility & Method Chains all at once.
+
+!["Local pre-funded account"](/docs/img/dijets-wallet.png)
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

@@ -1,0 +1,51 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'nodes-upgrade-dijets-node',
+  title: 'Upgradeing Dijets Node',
+  description: "Getting started with Realtime's Postgres Changes feature",
+}
+
+DijetsNodeGo is an ongoing project and there are regular version upgrades. Most
+upgrades are recommended but not required. Advance notice will be given for
+upgrades that are not backwards compatible. When a new version of the node is
+released, you will notice log lines like:
+
+```text
+Jan 08 10:26:45 ip-172-31-16-229 dijetsnodego[6335]: INFO [01-08|10:26:45] dijetsnodego/network/peer.go#526: beacon 9CkG9MBNavnw7EVSRsuFr7ws9gascDQy3 attempting to connect with newer version dijets/1.2.1. You may want to update your client
+```
+
+It is recommended to always upgrade to the latest version, because new versions
+bring bug fixes, new features and upgrades.
+
+To upgrade your node, just run the installer script again:
+
+```bash
+./dijetsnodego-installer.sh
+```
+
+It will detect that you already have DijetsNodeGo installed:
+
+```text
+DijetsNodeGo installer
+---------------------
+Preparing environment...
+Found 64bit Intel/AMD architecture...
+Found DijetsNodeGo systemd service already installed, switching to upgrade mode.
+Stopping service...
+```
+
+It will then upgrade your node to the latest version, and after it's done, start
+the node back up, and print out the information about the latest version:
+
+```text
+Node upgraded, starting service...
+New node version:
+dijets/1.2.1 [network=mainnet, database=v1.0.0, commit=2af56ac946bf3caa85972163fa616fdc83c3f3e6]
+Done!
+```
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

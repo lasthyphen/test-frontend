@@ -1,0 +1,97 @@
+clispec: '001'
+flags:
+  - id: help
+    name: --chain-config <string>
+    description: path to the chain configuration
+    default_value: 'false'
+    accepted_values:
+      - id: json
+        name: json
+        type: 'dijets ecc configure --chain-config /Users/Saleem/test/chain-config.json'
+  - id: help
+    name: -h, --help
+    description: help for configure
+    default_value: 'false'
+  - id: help
+    name:  --per-node-chain-config <string>
+    description: path to per node chain configuration
+    default_value: 'false'
+  - id: help
+    name: --ecc-config <string>
+    description: path to the ECC configuration
+    default_value: 'false'
+flags3:
+  - id: custom
+    name: --custom
+    description: use a custom Virtual Machine
+    default_value: 'false'
+  - id: help
+    name: --evm
+    description: use the SubnetEVM as the base template
+    default_value: 'false'
+  - id: help
+    name: -f, --force
+    description: overwrite the existing configuration if one exists
+    default_value: 'false'
+  - id: help
+    name: --genesis <string>
+    description: file path of genesis to use
+    default_value: 'false'
+  - id: help
+    name: -h, --help
+    description: help for the command
+    default_value: 'false'
+  - id: help
+    name: --latest
+    description: use latest VM version, takes precedence over --vm-version
+    default_value: 'false'
+  - id: help
+    name: --vm <string>
+    description: file path of custom vm to use
+    default_value: 'false'
+  - id: help
+    name: --vm-version <string>
+    description: version of vm template to use
+    default_value: 'false'
+flags4:
+  - id: help
+    name: -h, --help
+    description: help for ecc
+    default_value: 'false'
+flags5:
+  - id: testnet
+    name: --testnet testnet
+    description: deploy to dijets testnet
+    default_value: 'false'
+  - id: help
+    name: -h, --help
+    description: help for addValidator
+    default_value: 'false'
+  - id: dijetsnodego
+    name: --dijetsnodego-version <string>
+    description:  use specified version of Dijets Node
+    default_value: 'false'
+  - id: control-keys
+    name: --control-keys <strings>  
+    description: addresses authorised to make ECC changes
+    default_value: 'false'
+  - id: mainnet
+    name: --mainnet mainnet
+    description: deploy to dijets mainnet
+    default_value: 'false'
+  - id: nodeID
+    name: --nodeID <string>
+    description: set the NodeID of the validator to add
+    default_value: 'false'
+  - id: outputTx
+    name: --output-tx-path <string>
+    description: file path of the add validator tx
+    default_value: 'false'
+  - id: stakingduration
+    name: --staking-period duration 
+    description: period validator will be staking for
+    default_value: 'false'
+  - id: starttime
+    name: --start-time string 
+    description: UTC start time for validating
+    default_value: 'false'

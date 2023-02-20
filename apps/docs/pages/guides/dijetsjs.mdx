@@ -1,0 +1,67 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'introduction',
+  title: 'DijetsJS',
+  description: 'A Javascript client library to interact with Dijets Node and Network',
+  hide_table_of_contents: true,
+}
+
+<div className="flex items-start gap-6 not-prose" id="introduction">
+  <img src="/docs/img/icons/javascript-icon.svg" className="w-8 h-8 rounded" />
+  <div className="flex flex-col gap-2">
+    <h1 className="text-3xl text-scale-1200 m-0">Javascript Client Library</h1>
+    <h3 className="text-base font-mono text-scale-1100">Github: @Dijets-Inc/dijetsJS</h3>
+  </div>
+</div>
+
+<div className="max-w-7xl mt-4">
+  This reference section documents every object and method available in Dijets JavaScript
+  library, dijetsJS. You can use dijetsJS to interact with DijetsNodeGo instances, interface &amp; invoke
+  Dijets Platform Functions, build users, create addresses, make transfers and much more by issuing commands to Dijets node APIs.
+</div>
+<br>
+</br>
+<br>
+</br>
+<hr>
+</hr>
+### Installing as a package
+
+<RefSubLayout.EducationRow>
+  <RefSubLayout.Details>
+
+    You can install @Dijets-Inc/dijetsJS via the terminal.
+
+  </RefSubLayout.Details>
+
+  <RefSubLayout.Examples>
+
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="npm">
+
+        ```sh Terminal
+        npm install dijets
+        ```
+
+      </TabPanel>
+      <TabPanel id="yarn" label="Yarn">
+
+        ```sh Terminal
+        yarn add dijets
+        ```
+
+      </TabPanel>
+    </Tabs>
+
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

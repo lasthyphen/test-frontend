@@ -1,0 +1,40 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'smart-contracts',
+  title: 'Smart Contracts',
+  description: 'Smart contracts on Dijets Utility Chain.',
+}
+
+## Introduction
+
+Smart contracts are simply programs with self-executing lines of code that perform a specific function. This allows users and applications to push arbitrary code to the Blockchain by using transactions. A smart contract can hold both state and funds/tokens (DJTX, ETH, LINK etc) on the ledger. In other words, smart contracts can be seen as a state machine running in the Blockchain with a public address where we can push or pull the state. The transactions we use to push the arbitrary code in the blockchain can pass both funds and data.
+
+To generalise, smart contracts are used for two main purposes:
+
+- Hold funds and state, which are stored in the Blockchain under the contract's address
+- Run logic or code that can perform actions using those funds or update the contract itself.
+
+Compared to the traditional contracts, 
+smart contracts enable users to codify their agreements and trust relations by providing automated transactions without the supervision of a central authority,
+or a need for a third-party intermediary.
+
+From an implementation standpoint, a Virtual Machine is something that runs the byte code in the Blockchain. Each node in a blockchain network runs an instance of this virtual machine ready to execute any arbitrary code pushed to it.
+
+Smart contracts today are an integral element of DeFi, enabling a wide variety of complex financial transactions to be carried out with speed and efficiency.
+The benefits of smart contracts specially through the decentralized finance spectrum, simply outmatch the traditional banking institutions.
+
+
+## Dijets Utility Chain and Smart Contracts
+
+The Utility Chain is one of Dijets Ternary Chain ledgers. As an instance of Ethereum Virtual Machine the Utility Chain offers increased scalability and interoperability while still being compatible with
+all the Ethereum Tools. Dijets Ternary Chain Ledger system is built to deliver high performance, extreme scaling capabilities, fast confirmation times, and affordability
+unlike any other platform today. We believe that by making smart contracts cheaper, faster, and more scalable, Dijets can alleviate some of the biggest roadblocks
+developers are faced with today and unlock the true potential of this wonderful technology.
+
+Dijets enables developers to build and deploy Solidity-compatible dApps, launch custom blockchains with individual rule-sets, and trade digital assets faster than it was ever
+possible before. With Dijets Utility Chain developers can utilise a network with increased scalability and interoperability all the while being able to continue using the tools they are familiar with.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

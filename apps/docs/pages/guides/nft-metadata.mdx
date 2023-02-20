@@ -1,0 +1,170 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'nfts',
+  title: 'NFT Metadata',
+  description: 'Getting started with NFTs on Dijets.',
+  sidebar_label: 'Overview',
+}
+
+NFT metadata is the set of data that makes up the content of a given NFT. For a typical NFT, metadata can include the description, 
+name, traits, link to the hosted image etc. This information is often specified in a JavaScript Object Notation (JSON) format.
+
+# Preparing NFT Files for an ERC721 Smart Contract
+
+This tutorial details the process of uploading and preparing the NFT Files such as the image and its metadata
+so it can be used in smart contracts.
+
+In this example, the files will get uploaded to
+[Pinata](https://www.pinata.cloud/), a pinning service that prevents files from
+being garbage collected on IPFS. If you don't already have an account, please
+create one.
+
+## Preparing the Images
+
+This tutorial will create only 1 NFT, however, if you're interested in creating
+more, you're more than welcome to do so. The image I'm using is linked here if
+you'd like to use it.
+
+![Original NFT Photo](/docs/img/nft-file.jpeg)
+
+Place your image file in a folder on your computer. Name this image `0`, so
+it'll be the first image pulled from the smart contract. it'll be the first (and
+only) NFT in this collection, however, if you're adding more images you'd
+continue naming them in sequential numeric order. you'll upload this folder to
+Pinata once your images are organized and named correctly.
+
+<Admonition type="info">
+
+The choice of numbering your files depends upon you. A projects start file names can be `0`, and also `1`.
+Whatever you decide, be sure that it's consistent with the smart contract code. To be consistent with
+[this ERC-721 tutorial](intro-to-erc721s.md), we'll name this file `0`.
+
+</Admonition>
+
+![Image Folder](/docs/img/nft-2.png)
+
+After you log into Pinata, you'll see your dashboard. you'll see the upload
+button on the left. Click `Upload`
+
+![Pinata Dashboard](/docs/img/nft-3.png)
+
+Select `Folder` option from the dropdown.
+
+![Folder Button](/docs/img/nft-4.png)
+
+You'll then select the folder that the image is in. You may get a pop-up from
+your browser confirming you want to upload the folder and the files in it. If
+you do, confirm by clicking `Upload`.
+
+![Confirm Upload](/docs/img/nft-5.png)
+
+You'll then be prompted to name the folder you've uploaded. This is beneficial
+when you have several sets of folders uploaded to Pinata and are trying to keep
+them organized. For the this example we will name the folder `blue-sphere`
+
+![Confirm Upload](/docs/img/nft-6.png)
+
+After giving it a name, click `Upload` and wait for your file to
+upload. The quantity and size of the images could affect the upload time, but if
+you're starting small, it should only take a few seconds.
+
+Once the upload is complete, you'll see your folder in your dashboard.
+
+![Confirm Upload](/docs/img/nft-7.png)
+
+If you click on the folder name, it'll redirect you to the Pinata gateway to be
+able to view your newly uploaded files. If you have a paid Pinata account, it'll
+open the folder through your own gateway. Having a paid plan and personal
+gateway is NOT required for this tutorial but is recommended to have for larger
+collection sizes and hosting multiple folders.
+
+You can copy the CID of the image by clicking on the file name. Or you can click on the
+eye icon to preview the file which should open up a new tab with the full URL in the address bar. This URL is
+important. Copy this down to use in the next step as we set up the metadata. For
+this example, our URL is
+`https://gateway.pinata.cloud/ipfs/QmUTHR8JWdfsGrWT4Xf7TYvMSU7gKMpxxQNHpTjzhTtpXW/0.png`
+
+## Preparing the Metadata
+
+Now that we have the image uploaded and its URL, we can create the matching metadata file for it.
+
+Where this NFT is going to be an ERC-721, we know we can use metadata standards
+often found on Marketplaces such as [Opensea](https://opensea.io). The
+.json file below is an example of what the
+[metadata](https://docs.opensea.io/docs/metadata-standards#metadata-structure)
+should look like.
+
+```json
+{
+  "name": "",
+  "tokenId": 0,
+  "image": "",
+  "description": "",
+  "attributes": []
+}
+```
+
+Let's populate the values into the metadata file. You can choose any `name`
+and `description` that you want.
+
+The `tokenId` here will be `0` so that it corresponds to the image we just
+uploaded. If uploading multiple files, this needs to be incremented sequentially for each
+file.
+
+The `image` link is the URL we saved from the last step of the previous section.
+Paste that link here so the smart contract knows where to find the image file
+for your NFT. If uploading multiple files, the end of the URL (the specific
+image) needs to increment in each file.
+
+The `attributes` field isn't quite as important here, but if you were uploading
+NFTs with several layers, the attributes would be the information of those
+specific layers. This is often used when calculating the rarity of NFTs to be
+able to rank them by how frequently their layers appear throughout the entire
+collection. We will not be using the attributes field in this tutorial.
+
+Below is the metadata file now populated with all the required fields for the image we uploaded earlier
+
+```json
+{
+  "name": "Blue Sphere",
+  "tokenId": 0,
+  "image": "https://gateway.pinata.cloud/ipfs/QmUTHR8JWdfsGrWT4Xf7TYvMSU7gKMpxxQNHpTjzhTtpXW/0.png",
+  "description": "Apollo 13 image of earth"
+}
+```
+
+When saving this file, you want it to share the same name as the image it
+corresponds to. In this case, it is 0.
+
+Once the metadata file is uploaded to Pinata, the file extension will actually
+not be needed. it'll search for the file as a directory and be able to pull its
+information from there. To remove the file extension, follow these steps for a
+[Mac](https://support.apple.com/guide/mac-help/show-or-hide-filename-extensions-on-mac-mchlp2304/mac)
+environment, or these for a
+[Windows](https://www.techwalla.com/articles/how-to-remove-file-extensions)
+environment.
+
+Now that the file extension has been removed, place it in another folder as you
+did with the image file. They need to be SEPARATE folders.
+
+![Metadata Folder](/docs/img/nft-8.png)
+
+You'll now repeat the folder upload process to add the metadata to Pinata.
+Follow the same steps as above. Once completed, you'll have both folders
+available on your dashboard.
+
+![Uploaded Folders](/docs/img/nft-9.png)
+
+Click on the eye icon next to the folder name to be directed to the IPFS gateway and save the
+URL. This URL will be your base URL and won't need the direct file links. The
+smart contract will append the necessary file information for each NFT as
+needed. For example, my URL is
+`https://gateway.pinata.cloud/ipfs/QmXws4c743FbbVxAL8m5JHwjTa1XCctjJfgyXifVPzGyyw`.
+
+Now that the image and metadata files are ready, we can prepare to deploy a
+smart contract by following this [ERC-721 tutorial](intro-to-erc721s.md).
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

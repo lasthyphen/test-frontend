@@ -1,0 +1,91 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'comparison-of-dijets-with-other-blockchains',
+  title: 'Comparison of Dijets performance, security, decentralisation and scalability with other blockchains.',
+  description: 'How Dijets compares with other blockchains',
+}
+
+## Why Dijets blockchain is the best blockchain network
+Why Dijets blockchain is the best blockchain network
+
+A typical consensus protocol includes an all-to-all voting mechanism which has a designated leader who 
+initiates the decision process and a series of all-to-all communication rounds to ensure that all correct and reputedly-good 
+nodes reach the same decision. Such protocols typically require quadratic communication overhead with all-to-all communication of O(n²).
+
+This spells two massive issues for a protocol to cope with. 
+
+1. Deal with massive communication overheads.
+2. Maintain low latency and high throughput with increasing number of nodes. 
+
+Many blockchains cut down on the overheads and achieve better performance by 
+sacrificing decentralisation and only running a small number of nodes. By comparison Dijets is a quiescent network, that means the busier the network gets, the higher the throughput is.
+
+
+## How Dijets solved the communication overhead problem
+How Dijets solved the communication overhead problem
+
+Dijets solves the communication overhead problem by keeping the number 
+of messages each node has to handle per decision constantly low even if Dijets network scales up to millions of validators, 
+each one of those validators participates in the network consensus without ever effecting its performance.
+
+## How Dijets compares with BSC - Binance Smart Chain
+How Dijets compares with BSC - Binance Smart Chain
+
+Binance Smart Chain for example, is a direct clone of Ethereum with only 21 validators and the use of a centralised Proof of Authority consensus, where the majority of nodes are 
+also controlled by Binance itself. Not just Binance Smart Chain but many other projects too which use classical consensus 
+protocols claim to scale to thousands of nodes, when in fact they are selecting only a small random selection of nodes to 
+perform consensus for each block, all the while none of the other nodes can participate in the actual consensus.
+
+In comparison to BSC, Dijets uses repeated random sub-sampling of the entire network to quickly achieve consensus with minimal 
+overheads per node for incredible speed & performance. Dijets solves the communication overhead problem by keeping the number 
+of messages each node has to handle per decision constantly low even if Dijets network scales up to millions of validators, 
+each one of those validators participates in the network consensus without ever effecting its performance.
+
+
+## Performance comparison of Dijets and other blockchains
+Performance comparison of Dijets and other blockchains
+
+Another easy way for Blockchains to achieve higher performance is to increase the hardware requirements for running a node, the more hardware resources a node has to have, the higher the performance of the overall network is. 
+
+This network performance is eked out yet again at the expense of decentralisation. How so? Making the practice of running a node out of reach of the everyday people who are either not technical enough or don't have the time 
+to unerstand all the intracacies of GPU or ASIC mining etc So the majority of the validating nodes which have the taxing hardware requirements usually come from within. 
+
+## Comparing Dijets blockchain with Solana blockchain
+Comparing Dijets blockchain with Solana blockchain
+
+Solana recommends its validators to run hardware with 24 Cores, 128 GB Memory, 4 TB NVMe disks, Nvidia 2080 ti graphics cards (4000 cores) and very high bandwidth connections. 
+This extremely limits the number of people capable of running a node with those specific requirements due to the expense, similar to Bitcoin ASIC mining rigs and the infamous mining farms of China.
+
+## Transaction speeds in Dijets
+Transaction speeds in Dijets
+
+Solana’s claimed transactions per second numbers are also vastly inflated because they conveniently choose to include the consensus voting messages as part of their transactions when calculating the TPS. Dijets current rate of an approximate 5200 TPS does not include any transactions for voting messages. Should Dijets decide to add those in, just as Solana does, then the TPS for the Value Chain alone would exceed 1.3 million. Solana’s TPS is mainly achieved through running parallel execution using the 4000 cores of the GPU. 
+
+This approach works when you are processing the same computation simultaneously over and over again. If you have a blockchain with a very few smart contracts and even fewer types of transactions as those can be frequently run and can be used by the GPU to process them in parallel then
+it should not matter.
+
+But what happens to a blockchain's performance if and when it becomes more diversified with lots of different smart contracts & transactions. What happens when computations are required by the network for which the GPUs can’t be used and instead CPU’s are required. CPUs which have far fewer cores than the 4000 it requires to run a node with Solana. The blockchain's performance suffers greatly because of it.
+
+ The more diversified Solana's ecosystem gets, the more drastically its performance will degrade. In comparison Dijets node requires just 2 cores, 4 GB Memory and 32 GB of Hard Drive space.
+
+## Comparison of Transaction security between Dijets and other blockchains like cardano, solana and ethereum.
+Comparison of Transaction security between Dijets and other blockchains like cardano, solana and ethereum.
+
+Blockchains like Cardano use a consensus mechanism that follows the longest chain rule, where a leader is chosen that can add a block to the chain without having to first reach consensus with other validators on the validity of that block. That is foundationally insecure to say the least because subsequent leaders can then choose to either build on top of the previous block - if they believe that the leader is not a bad actor and thus believe in the validity of the block - or they can choose to fork the network. Transactions could therefore be initiated with very weak security backing them up and it gets continuously weakened as more subsequent blocks get added to the chain.
+
+In Ethereum transaction security relies on fraud proofs where "Verifiers" run the computation and verify the state output afterwards. And afterwards in some instances mean a week or more. Verifiers are there to make money and to look out for the bottom line. Running a verifier to check all the transactions costs money, and the higher the number of transactions get added to the chain, the more resources the verifiers need to check them all which translates into incurring more costs. And because verifiers are incentivised based on the fraud proofs they provide, its almost a certainty that verifiers may sometimes have to go for long periods without finding any fraud and thus receiving no reward in return. Mounting costs and dimishing returns is most likely to result in verifiers dropping out which would reduce the overall network security even further. 
+
+Polkadot Blockchain uses a similar concept to Ethereum's Verifiers. And its called the Fishermen. "Fisherman" or "Verifiers" are both a security concern because of a fundamental flaw in the concept.
+
+#### How secure are transactions on Dijets
+How secure are transactions on Dijets 
+
+Dijets network checks the validity of the transaction against the entire network as part of its consensus mechanism before that transaction gets added to the chain. On paper this may sound like a latency nightmare but Dijets Chain Ledger System ensures that each transaction has sub second finality, which is irreversible and able to scale to millions of nodes. Security in Dijets, to summarise is unparalleled and just like its other operational and functional aspects, Dijets is far beyond the reach of other blockchains.
+
+
+## Comparing Dijets Security with Polkadot security.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

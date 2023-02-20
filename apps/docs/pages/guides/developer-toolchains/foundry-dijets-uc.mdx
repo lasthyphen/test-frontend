@@ -1,0 +1,251 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'foundry-dijets-uc',
+  title: 'Use Foundry with Dijets Utility Chain',
+  description: 'Transform images with Storage',
+}
+
+## Introduction
+
+This guide shows how to deploy and interact with smart contracts using foundry
+on a local Dijets Utility Chain running on a local test network.
+
+[Foundry toolchain](https://github.com/foundry-rs/foundry) is a smart contract
+development toolchain written in Rust. It manages your dependencies, compiles
+your project, runs tests, deploys, and lets you interact with the chain from the
+command-line.
+
+## Recommended Knowledge
+
+- Basic understanding of [Solidity](https://docs.soliditylang.org) and Dijets.
+- You are familiar with [Dijets Smart Contract Guide Repo](https://github.com/Dijets-Inc/dijets-smart-contracts-guide).
+- Basic understanding of the [Dijets's architecture](platform)
+- Understand the purpose and how to complete an IntraChain transfer in Dijets 
+
+## Requirements
+
+- You have [installed
+  Foundry](https://github.com/foundry-rs/foundry#installation). This
+  installation includes the `forge` and `cast` binaries used in this
+  walk-through.
+
+### DijetsNodeGo and Dijets Network Runner
+
+[DijetsNodeGo](https://github.com/Dijets-Inc/dijetsnodego) is a Dijets node
+implementation written in Go. 
+
+[Dijets Network Runner](dijets-up) is a tool to quickly
+deploy local test networks. Together, you can deploy local test networks and run
+tests on them.
+
+Start a local five node Dijets network:
+
+```text
+cd /path/to/dijets-up
+# start a five node staking network
+./go run examples/local/fivenodenetwork/main.go
+```
+
+<Admonition type="info">
+
+  A five node Dijets network is running on your machine. Network will run until you Ctrl + C to exit.
+
+</Admonition>
+
+## Getting Started
+
+This section will walk you through creating an [ERC721](https://eips.ethereum.org/EIPS/eip-721) Token.
+
+<Admonition type="info">
+
+  ERC721 is a standard for representing ownership of non-fungible tokens, that is, where each token is unique.
+
+</Admonition>
+
+### Clone Dijets Smart Contracts Guide Repo
+
+Clone the [quickstart
+repository](https://github.com/Dijets-Inc/dijets-smart-contracts-guide) and
+install the necessary packages via `yarn`.
+
+```text
+git clone https://github.com/Dijets-Inc/dijets-smart-contracts-guide.git
+cd dijets-smart-contracts-guide
+yarn
+```
+
+In order to deploy contracts, you need to have some test DJTX in your wallet. You can get testnet
+DJTX from [Dijets Faucet](https://faucet.dijets.io), that transfers a small amount of test DJTX tokens for
+you to play around with.
+
+## Write Contracts
+
+We’ll use a sample ERC721 contract to track items in our game, which will each have their own unique attributes. 
+Whenever one is to be awarded to a player, it will be minted and sent to them. 
+Players are free to keep their token or trade it with other people as they see fit, as they would any other asset on the blockchain
+The smart contract is in the repo we cloned earlier for this example
+[`GameNFT.sol`](https://github.com/Dijets-Inc/dijets-smart-contract-guide/blob/master/contracts/GameNFT.sol)
+found in `./contracts` folder.
+
+```ts
+//SPDX-License-Identifier: MIT
+// contracts/ERC721.sol
+
+pragma solidity >=0.6.2;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+contract GameNFT is ERC721 {
+  using Counters for Counters.Counter;
+  Counters.Counter private _tokenIds;
+
+  constructor() ERC721("GameItem", "GMT") {}
+  // 
+
+  // commented out unused variable
+  // function awardItem(address player, string memory tokenURI)
+  function awardItem(address player)
+    public
+    returns (uint256)
+  {
+    _tokenIds.increment();
+
+    uint256 newItemId = _tokenIds.current();
+    _mint(player, newItemId);
+    // _setTokenURI(newItemId, tokenURI);
+
+    return newItemId;
+  }
+}
+```
+
+Let's examine this implementation of an NFT as a Game Item. We start by
+importing to contracts from our node modules. We import OpenZeppelin's open
+source implementation of the [ERC721
+standard](https://docs.openzeppelin.com/contracts/2.x/api/token/erc721) which
+our NFT contract will inherit from. Our constructor takes the `_name` and
+`_symbol` arguments for our NFT and passes them on to the constructor of the
+parent ERC721 implementation. Lastly we implement the `awardItem` function which
+allows anyone to mint an NFT to a player's wallet address. This function
+increments the `currentTokenId` and makes use of the `_mint` function of our
+parent contract.
+
+## Compile & Deploy with Forge
+
+[Forge](https://book.getfoundry.sh/reference/forge/forge-build.html) is a
+command-line tool that ships with Foundry. Forge tests, builds, and deploys your
+smart contracts.
+
+To compile the NFT contract run:
+
+```text
+forge build
+```
+
+By default the compiler output will be in the `out` directory. To deploy our
+compiled contract with Forge we need to:
+
+1. Set environment variables for the RPC endpoint.
+1. Specify the private key with test DJTX to deploy the contract.
+
+Set your environment variables by running:
+
+```text
+export RPC_URL=<YOUR-RPC-ENDPOINT>
+export PRIVATE_KEY=<YOUR-PRIVATE-KEY>
+```
+
+Since we are deploying to a local testnet, our `RPC_URL` export should be:
+
+```text
+export RPC_URL=http://127.0.0.1:9650/ext/bc/C/rpc
+```
+
+Once set, you can [deploy your NFT with
+Forge](https://book.getfoundry.sh/reference/forge/forge-create.html) by running
+the command below while adding the values for `_name` and `_symbol`, the
+relevant [constructor
+arguments](https://github.com/Dijets-Inc/dijets-smart-contract-guide/blob/master/contracts/GameNFT.sol#L13)
+of the NFT contract:
+
+```text
+forge create NFT --rpc-url=$RPC_URL --private-key=$PRIVATE_KEY --constructor-args GameItem GMT
+```
+
+Upon successful deployment, you will see the deploying wallet's address, the
+contract's address as well as the transaction hash printed in our terminal.
+
+Here's an example output from an NFT deployment.
+
+```text
+[⠔] Compiling...
+No files changed, compilation skipped
+Deployer: 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
+Deployed to: 0x52c84043cd9c865236f11d9fc9f56aa003c1f922
+Transaction hash: 0xf35c40dbbdc9e4298698ad1cb9937195e5a5e74e557bab1970a5dfd42a32f533
+```
+
+_Note: Please store your `Deployed to` address for use in the next section._
+
+## Using Cast to Interact with the Smart Contract
+
+We can call functions on our NFT contract with
+[Cast](https://book.getfoundry.sh/reference/cast/cast-send.html), Foundry's
+command-line tool for interacting with smart contracts, sending transactions,
+and getting chain data. In this scenario, we will mint a Game Item to a player's
+wallet using the [`awardItem`
+function](https://github.com/Dijets-Inc/dijets-smart-contract-guide/blob/master/contracts/GameNFT.sol#L17)
+in our smart contract.
+
+Mint an NFT from your contract by replacing `<NFT-CONTRACT-ADDRESS>` with your
+`Deployed to` address and `<NFT-RECIPIENT-ADDRESS>` with an address of your
+choice.
+
+<Admonition type="info">
+
+ This section assumes that you have already set your RPC and private key env variables during deployment_
+
+</Admonition>
+
+```text
+cast send --rpc-url=$RPC_URL  <NFT-CONTRACT-ADDRESS> "awardItem(address)" <NFT-RECIPIENT-ADDRESS> --private-key=$PRIVATE_KEY
+```
+
+Upon successful completion, the command line will display the transaction data.
+
+```text
+blockHash               0x1d9b0364fe002eeddd0e32be0c27d6797c63dffb51fe555ea446357759e6a6f8
+blockNumber             3312
+contractAddress
+cumulativeGasUsed       90837
+effectiveGasPrice       28000000000
+gasUsed                 90837
+logs                    [{"address":"0x45857b942723fff8ee7acd2b1d6515d9965c16e5","topics":["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef","0x0000000000000000000000000000000000000000000000000000000000000000","0x000000000000000000000000845095a03a6686e24b90fed55e11f4ec808b1ab3","0x0000000000000000000000000000000000000000000000000000000000000001"],"data":"0x","blockHash":"0x1d9b0364fe002eeddd0e32be0c27d6797c63dffb51fe555ea446357759e6a6f8","blockNumber":"0xa37d50","transactionHash":"0x4651ae041a481a6eeb852e5300e9be48e66a1d2332733df22d8e75cf460b0c2c","transactionIndex":"0x0","logIndex":"0x0","removed":false}]
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000040000000000000000000000000008010000000000000000040000000000000000000000000000020000040000000000000800000000002000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000060080000000000000000000000000000000000000000000000000000000000000000
+root
+status                  1
+transactionHash         0x4651ae041a481a6eeb852e5300e9be48e66a1d2332733df22d8e75cf460b0c2c
+transactionIndex        0
+type                    2
+```
+
+Thats it! You just minted your first NFT from your contract using Cast from Foundry. You can check the
+owner of `tokenId` 1 by running the `cast call` command below:
+
+```zsh
+cast call --rpc-url=$RPC_URL --private-key=$PRIVATE_KEY <NFT-CONTRACT-ADDRESS> "ownerOf(uint256)" 1
+```
+
+The address you provided above should be returned as the owner.
+
+```zsh
+0x000000000000000000000000845095a03a6686e24b90fed55e11f4ec808b1ab3
+```
+
+Join us on [Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org/) to learn more or for any questions you may have.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

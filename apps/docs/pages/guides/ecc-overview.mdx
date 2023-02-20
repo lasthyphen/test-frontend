@@ -1,0 +1,100 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'ecc-overview',
+  title: 'Enterprise Consortia Chain',
+  description: 'Learn about the Enterprise Consortia Chain',
+  sidebar_label: 'Overview',
+}
+
+## Overview
+
+An Enterprise Consortia Chain - ECC is Dijets ‘Blockchain-as-a-Service’ solution.
+With limited blockspace and demand for blockchain solutions rising, ECCs are
+Dijets proposed solution to the problem.
+
+Instead of forcing all transactions to take place on a single, shared state, 
+ECCs allow organisations to launch their own blockchains – with tailor made
+rulesets which not only creates more blockspace and computation to meet demand but
+also lets the businesses decide how to customize various aspects of the underlying chains.
+
+All ECCs are sovereign networks which define their own rules regarding its
+memberships and token economics. These rulesets are what differentiates one ECC from another.
+For example: ECC(A) can decide to implement features like sending gas fees to a treasury 
+smart contract and ECC(B) can require all users of its chain to pass through KYC before they can interact 
+with any of its applications.
+
+Similarly ECCs can deploy a permissioned blockchain, unlocking use cases for more traditional institutions.
+
+Each ECC is composed of a dynamic subset of
+validators working together to achieve consensus on the state of one or more
+blockchains. Each blockchain is validated by exactly one ECC, and each ECC
+can have multiple blockchains. 
+
+ECCs are independent, they specify their own execution logic, determine their
+own fee regime, maintain their own state, facilitate their own networking, and
+provide their own security. They don’t share execution thread, storage or
+networking with any other ECCs including Dijets Network. This allows organisations
+to scale up their network easily all the while enabling lower latency and higher
+transactions per second (TPS).
+
+## Advantages
+
+As an ECC manages its own membership, it can create its own token economics and
+membership rules. It can also decide to have qualification properties
+for all of its validators.
+
+Another major advantage is that ECCs can have their own token economics with their own native tokens and fee
+markets completely independent of other chains operating under Dijets umbrella. 
+They can launch multiple blockchains with customised virtual machines each being an instance of
+a separate blockchain. Put simply, VMs define the behavior of the ECCs and their blockchain networks.
+
+<Admonition type="info">
+Virtual Machine defines the application-level logic of a blockchain.
+It specifies the blockchain’s state, state transition
+function, transactions, and the API through which users can interact with the
+blockchain.
+</Admonition>
+
+Organisations can choose from a number of boiler-plate VMs provided by Dijets or
+write their own VM. Businesses can finally launch entirely new blockchain network from scratch
+without worrying about things like networking, consensus, and the structure of the blockchain etc. as Dijets does all of that
+behind the scenes so developers and businesses can focus on the specifics and the rule-sets of the blockchain instead.
+
+### Compliance
+
+ECCs architecture makes regulatory compliance possible. We already discussed that an ECC may require 
+its validators to meet a set of requirements.
+
+These requirements can range from absolutely anything the organisations choose them to be including:
+
+- All validators of an ECC must reside in a certain country.
+- An organisation looking to build an institutional grade ECC for its DeFi application or a futures exchange can require all of its validators to pass a KYC/AML check.
+- An ECC can also require all of its validators to meet certain computational or hardware obligations or even be affiliated with a real-world organisation or hold a certain license.
+
+Organisations or developers can create an ECC where only certain pre-defined validators may join and
+create a completely private and permissioned network where the contents of the blockchains would only be visible
+to those pre-qualified validators only. Such an ECC would be ideal for organisations interested in keeping
+their information private.
+
+## Flexibility & Customisability
+
+
+Building a custom blockchain network with its own rulesets and high scalability
+has mostly required a great deal of
+time and effort in the past. The results offered limited security, and generally produced bespoke yet
+fragile blockchains that never got off the ground.
+
+Ethereum with its smart contracts was a step in the right direction but The Ethereum VM has low performance
+and imposes restrictions on smart contract developers. Solidity and the other
+few languages for writing Ethereum smart contracts are vague and unfamiliar to most
+programmers.
+
+Dijets value proposition to businesses is its ability to create highly scalable and customizable blockchains.
+We envision a future where thousands of ECCs form a heterogeneous interoperable network of many blockchains, 
+that takes advantage of the blueprint Dijets is building. A safer, fairer and globally distributed, interoperable 
+and trust-less framework of unprecedented decentralisation. The new internet.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

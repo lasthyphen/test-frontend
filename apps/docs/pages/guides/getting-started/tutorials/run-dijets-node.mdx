@@ -1,0 +1,250 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'run-dijets-node',
+  title: 'Build and Run a Dijets Node',
+  description: 'Learn how to build and run a Dijets Network Node.',
+  sidebar_label: 'Run a Dijets Node',
+}
+
+# Run Dijets Node Manually
+
+The quickest way to learn about Dijets is to run a node and interact with the network.
+
+In this tutorial, we will:
+
+- Install and run a Dijets node
+- Connect to Dijets Network
+
+<Admonition type="info">
+
+If you're interested in using a third-party service to host your node or run a
+validator, [check out the options](../README.md#build).
+
+</Admonition>
+
+This tutorial is primarily geared toward developers and people interested in how
+the Dijets Platform works. If you're just interested in setting up a node for
+staking, you may use the DijetsNodeGo installer script.  Installer automates
+the installation process and sets it up as a system service, which is
+recommended for unattended operation. You may also try things out by following
+this tutorial first, and then later set up the node using the installer as a
+permanent solution.
+
+## Requirements
+
+### Computer Hardware and OS
+
+Dijets is an incredibly lightweight protocol, so nodes can run on commodity
+hardware. Note that as network usage increases, hardware requirements may
+change.
+
+1. RAM: 16 GiB
+1. Storage: 250-500 GiB
+1. CPU: Equivalent of 8 AWS vCPU
+1. Operating System: Ubuntu 20.04 or MacOS &gt;= 12
+
+### Networking
+
+To run successfully, a Dijets Node needs to accept connections from the Internet
+on the network port `9651`. Before you proceed with the installation, you need
+to determine the networking environment your node will run in.
+
+#### Running on a Cloud Provider
+
+If your node is running on a cloud provider computer instance, it will have a
+static IP. Find out what that static IP is, or set it up if you didn't already.
+
+#### Running on a Home Connection
+
+If you're running a node on a computer that is on a residential internet
+connection, you have a dynamic IP; that is, your IP will change periodically.
+You will need to set up inbound port forwarding of port `9651` from the internet
+to the computer the node is installed on.
+
+<Admonition type="warning">
+
+Please note that a fully connected Dijets node maintains and communicates
+over a couple of thousand of live TCP connections. For some low-powered and
+older home routers that might be too much to handle. If that is the case you may
+experience lagging on other computers connected to the same router, node getting
+benched, failing to sync and similar issues.
+
+</Admonition>
+
+## Running a Dijets Node
+
+Let’s install DijetsNodeGo, the Golang implementation of a Dijets node, and
+connect to the Dijets primary network.
+
+### Download DijetsNodeGo
+
+The node is a binary program. You can either download the source code and then
+build the binary program, or you can download the pre-built binary. You don’t
+need to do both.
+
+Building the node from source is recommended if you're a developer looking to
+experiment and build on Dijets.
+
+#### **Source Code**
+
+First install Go 1.18.1 or later. Follow the instructions
+[here](https://golang.org/doc/install). You can verify by running `go version`.
+
+Set `$GOPATH` environment variable properly for Go to look for Go Workspaces.
+Please read [this](./create-local-network#setting-bin-in-your-path) for details. You can verify
+by running `echo $GOPATH`.
+
+Download the DijetsNodeGo repository into your `$GOPATH`:
+
+```text
+cd $GOPATH
+```
+```text
+mkdir -p src/github.com/Dijets-Inc
+```
+```text
+cd src/github.com/Dijets-Inc
+```
+```text
+git clone git@github.com:Dijets-Inc/dijetsnodego.git
+```
+```text
+cd dijetsnodego
+```
+
+<Admonition type="info">
+This checkouts to the master branch. For the latest stable version, checkout the latest tag.
+</Admonition>
+Build DijetsNodeGo:
+
+```bash
+./scripts/build.sh
+```
+
+The binary, named `dijetsnodego`, is in `dijetsnodego/build`. If you've followed
+the instructions so far, this will be within your `$GOPATH` at:
+`$GOPATH/src/github.com/Dijets-Inc/dijetsnodego/build`.
+
+To begin running DijetsNodeGo, run the following (hit Ctrl+C to stop your node):
+
+```bash
+./build/dijetsnodego
+```
+
+#### Dijets Node Binary
+
+<Tabs
+  scrollable
+  size="small"
+  type="underlined"
+  defaultActiveId="text"
+>
+<TabPanel id="text" label="Mac OS">
+```text
+Download: dijetsnodego-macos-<VERSION>.zip
+Unzip: unzip dijetsnodego-macos-<VERSION>.zip 
+The resulting folder, dijetsnodego-<VERSION>, contains the Dijets Node binaries.
+```
+</TabPanel>
+<TabPanel id="before" label="Linux">
+```text
+Download: dijetsnodego-linux-amd64-<VERSION>.tar.gz
+Unzip the file by running: tar -xvf dijetsnodego-linux-amd64-<VERSION>.tar.gz
+The resulting folder, dijetsnodego-<VERSION>-linux, contains the Dijets Node binaries.
+```
+</TabPanel>
+<TabPanel id="after" label="Raspberry Pi">
+```text
+Download: dijetsnodego-linux-arm64-<VERSION>.tar.gz
+Unzip the file by running: tar -xvf dijetsnodego-linux-arm64-<VERSION>.tar.gz
+The resulting folder, dijetsnodego-<VERSION>-linux, contains the Dijets Node binaries.
+```
+</TabPanel>
+</Tabs>
+
+### Start a Node, and Connect to Dijets Mainnet
+
+<Tabs
+  scrollable
+  size="small"
+  type="underlined"
+  defaultActiveId="text"
+>
+<TabPanel id="text" label="Source Builds">
+If you built Dijets node binary from source, run:
+```bash
+./build/dijetsnodego
+```
+</TabPanel>
+<TabPanel id="before" label="Pre-built Mac OS Binaries">
+If you downloaded pre-built Dijets node binary for MacOS, run:
+```bash
+./dijetsnodego-<VERSION>/build/dijetsnodego
+```
+</TabPanel>
+<TabPanel id="after" label="Pre-built Linux Binaries">
+If you downloaded pre-built Dijets node binary for Linux, run:
+```bash
+./dijetsnodego-<VERSION>-linux/dijetsnodego
+```
+</TabPanel>
+</Tabs>
+By default this node will connect to Dijets Mainnet.
+
+When the node starts, it has to catch up with the rest of the
+network in a process called bootstrapping. Your node will have successfully finished bootstrapping
+when it prints logs as follows:
+
+```text
+[01-02|10:20:15.195] INFO <Utility Chain> cacid/transitive.go:392 consensus starting {"lastAcceptedBlock": "2ksGoFVpnDCbFKX4jRpJwH8EFws33Q2yC1HhWgAiy3tGrpDSxc"}
+[01-02|10:20:16.102] INFO <Method Chain> cacid/transitive.go:392 consensus starting {"lastAcceptedBlock": "2nhvXBcLAzeloCPEMv6aHGvZ30oa1SBp1reEm7gNxvFjnfKADV"}
+[01-02|10:20:21.303] INFO <Value Chain> dijets/transitive.go:334 consensus starting {"lenFrontier": 1}
+```
+
+Run the following command in a separate terminal to check if a given chain has finished the bootstrapping process:
+
+```text
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"info.isBootstrapped",
+    "params": {
+        "chain":"Value"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/info
+```
+
+If this returns `true`, the chain is bootstrapped; otherwise, it returns
+`false`. If you make other API calls to a chain that is not done bootstrapping,
+it will return `API call rejected because chain is not done bootstrapping`. If
+you are still experiencing issues please contact us on
+[Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org)
+
+Your node is running and connected now. If you want to use your node as a
+validator on the mainnet and earn rewards for helping secure the network.
+
+You can use `Ctrl + C` to kill the node.
+
+To be able to make API calls to your node from other machines, when starting up
+the node include argument `--http-host=` (for example `./build/dijetsnodego
+--http-host=`)
+
+#### Connect to Dijets Testnet
+
+To connect to the Dijets Testnet instead of the Mainnet, use argument
+`--network-id=dijets-testnet`. You can get funds on Dijets Testnet from
+[Dijets Faucet.](https://faucet.dijets.io/)
+
+## What Next?
+
+A fully bootstrapped Node on Dijets network is capable of performing consensus on its own.
+However, the rest of the network will not query your node for sampling purposes when trying to reach consensus.
+Only the validator nodes are queried for sampling during consensus.
+
+Now that you have successfully launched your Node, you can learn how to add it as a Validator on Dijets Network.
+Check out [Add a Validator](/docs/guides/nodes/validator-nodes) for a step-by-step guide on how to become a Validator.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

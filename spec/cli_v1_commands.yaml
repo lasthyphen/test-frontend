@@ -1,0 +1,60 @@
+clispec: '001'
+info:
+  id: cli
+  version: 1.34.5
+  title: Dijets CLI
+  language: sh
+  source: https://github.com/supabase/cli
+  bugs: https://github.com/supabase/cli/issues
+  spec: https://github.com/supabase/supabase.tools/cli_spec/lib.yaml
+  description: |
+    Dijets CLI provides you with tools to develop your application locally, and deploy your application to the Supabase platform.
+  tags:
+    - id: local-dev
+      title: Local Development
+    - id: management-api
+      title: Management APIs
+    - id: other-commands
+      title: Additional Commands
+flags:
+  - id: config
+    name: --config <string>
+    description: path to a config file
+    default_value: $HOME/.dijets-cli.json
+    accepted_values:
+      - id: json
+        name: json
+        type: 'dijets [subcommand] --config /Users/saleem/.dijets-cli.json'
+  - id: help
+    name: -h, --help
+    description: help for dijets
+    default_value: 'false'
+  - id: log-level
+    name: --log-level <string>
+    description: log level for the application
+    default_value: ''
+    accepted_values:
+      - id: json
+        name: json
+        type: 'dijets [subcommand] --log-level ERROR'
+  - id: version
+    name: -v, --version
+    description: version for dijets-cli
+    default_value: 'false'
+commands:
+  - id: supabase-vanity-subdomains
+    title: supabase vanity-subdomains
+    summary: Manage vanity subdomains for Supabase projects
+    description: |-
+      Manage vanity subdomains for Supabase projects.
+
+      Usage of vanity subdomains and custom domains is mutually exclusive.
+    tags:
+      - management-api
+    links: []
+    subcommands:
+      - supabase-vanity-subdomains-activate
+      - supabase-vanity-subdomains-check-availability
+      - supabase-vanity-subdomains-delete
+      - supabase-vanity-subdomains-get
+    flags: []

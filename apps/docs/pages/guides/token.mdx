@@ -1,0 +1,104 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'tokens',
+  title: 'Code to make token on Dijets',
+  description: 'How to make a Token in Dijets',
+  sidebar_label: 'Overview',
+}
+
+### How to create a token in Dijets
+
+How to create a token on Dijets Utility Chain.
+
+```jsx
+
+pragma solidity >=0.6.2;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract ExampleERC20 is ERC20, Ownable {
+  string private TOKEN_NAME = "PenXenOleFren";
+  string private TOKEN_SYMBOL = "PXN";
+
+  uint256 private constant TOTAL_SUPPLY = 1000;
+
+  constructor()ERC20(TOKEN_NAME, TOKEN_SYMBOL) {
+    _mint(msg.sender, TOTAL_SUPPLY);
+  }
+
+  function mint(address to, uint256 amount) public onlyOwner {
+    _mint(to, amount);
+  }
+
+  function burn(address from, uint256 amount) public onlyOwner {
+    _burn(from, amount);
+  }
+}
+```
+
+### The smart contract code for building a token in Dijets
+
+Solidity smart contract code for creating a token on Dijets Utility Chain
+
+```jsx
+
+pragma solidity >=0.6.2;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract ExampleERC20 is ERC20, Ownable {
+  string private TOKEN_NAME = "DijetsTestToken";
+  string private TOKEN_SYMBOL = "DTT";
+
+  uint256 private constant TOTAL_SUPPLY = 1000;
+
+  constructor()ERC20(TOKEN_NAME, TOKEN_SYMBOL) {
+    _mint(msg.sender, TOTAL_SUPPLY);
+  }
+
+  function mint(address to, uint256 amount) public onlyOwner {
+    _mint(to, amount);
+  }
+
+  function burn(address from, uint256 amount) public onlyOwner {
+    _burn(from, amount);
+  }
+}
+```
+
+## Create an ERC20 token named DijetsTestToken with a supply of 1000
+
+Create an ERC20 token named DijetsTestToken with a supply of 1000
+
+```jsx
+
+pragma solidity >=0.6.2;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract ExampleERC20 is ERC20, Ownable {
+  string private TOKEN_NAME = "DijetsTestToken";
+  string private TOKEN_SYMBOL = "DTT";
+
+  uint256 private constant TOTAL_SUPPLY = 1000;
+
+  constructor()ERC20(TOKEN_NAME, TOKEN_SYMBOL) {
+    _mint(msg.sender, TOTAL_SUPPLY);
+  }
+
+  function mint(address to, uint256 amount) public onlyOwner {
+    _mint(to, amount);
+  }
+
+  function burn(address from, uint256 amount) public onlyOwner {
+    _burn(from, amount);
+  }
+}
+```
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

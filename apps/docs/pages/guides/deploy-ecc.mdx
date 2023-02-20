@@ -1,0 +1,153 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'ecc-lifecycle',
+  title: 'Deploy an ECC',
+  description: 'Learn how to deploy an ECC on a local Dijets test network',
+  sidebar_label: 'Overview',
+}
+
+In the previous tutorial we learnt how to build our ECC. We completed the tutorial with a confirmation from `Dijets-CLI` tool
+that the configuration file for our newly built ECC was successfully generated.
+
+We can now use the same configuration file and deploy our ECC running on a local dijets test network.
+
+The details we specified in the previous tutorial for building the ECC Blockchain network were as follows:
+
+- ECC Name: Mimo
+- Token Symbol: IMO 
+- Chain ID: 2222 
+- Gas Limit: 8000000
+
+To deploy our ECC on a local Dijets Test Network run:
+
+`dijets ecc deploy mimo`
+
+Make sure to substitute the name of your ECC if you used a different one than `mimo`.
+
+Next, select `Local Network`.
+
+This command boots a five node Dijets network on your machine. It needs to download the latest
+versions of DijetsNodeGo and ECC-EVM. The command may take a couple minutes to run.
+
+<video width="100%" autoPlay="autoplay" muted playsInline controls={true}>
+  <source
+    src="/docs/videos/deploy-ecc.mov"
+    type="video/mp4"
+    muted
+    playsInline
+  />
+</video>
+
+As shown in the video above, the command output should look something like as follows:
+
+```text
+> dijets ecc deploy mimo
+✔ Local Network
+Deploying [mimo] to Local Network
+Installing ecc-evm-v0.4.3...
+ecc-evm-v0.4.3 installation successful
+Backend controller started, pid: 36257, output at: /Users/saleemfareed/.dijets-cli/runs/server_20230217_042308/dijets-cli-backend
+Installing dijetsnodego-v1.9.0...
+dijetsnodego-v1.9.0 installation successful
+VMs ready.
+Starting network...
+..........Virtual Machines ready ✔ -- ECC Zone assigned ✔ -- Blockchain Network is live ✔
+......
+Network ready to use. Local network node endpoints:
++-------+----------+------------------------------------------------------------------------------------+
+| NODE  |    VM    |                                        URL                                         |
++-------+----------+------------------------------------------------------------------------------------+
+| node2 | mimo     | http://127.0.0.1:9652/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc |
++-------+----------+------------------------------------------------------------------------------------+
+| node3 | mimo     | http://127.0.0.1:9654/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc |
++-------+----------+------------------------------------------------------------------------------------+
+| node4 | mimo     | http://127.0.0.1:9656/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc |
++-------+----------+------------------------------------------------------------------------------------+
+| node5 | mimo     | http://127.0.0.1:9658/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc |
++-------+----------+------------------------------------------------------------------------------------+
+| node1 | mimo     | http://127.0.0.1:9650/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc |
++-------+----------+------------------------------------------------------------------------------------+
+
+Browser Extension connection details (any node URL from above works):
+RPC URL:          http://127.0.0.1:9650/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc
+Funded address:   0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC with 1000000 (10^18) - private key: 56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027
+Network name:     mimo
+Chain ID:         2222
+Currency Symbol:  IMO
+```
+
+
+You can use the deployment details to connect to and interact with your ECC. Now that the ECC has been deployed on a local test network,
+we can start interacting with it.
+
+## Interacting with Your ECC
+
+You can use the value provided by `Browser Extension connection details` to connect to your ECC
+with MetaMask, Decypher or any other wallet.
+
+
+```text
+Browser Extension connection details (any node URL from above works):
+RPC URL:          http://127.0.0.1:9650/ext/bc/SPqou41AALqxDquEycNYuTJmRvZYbfoV9DYApDJVXKXuwVFPz/rpc
+Funded address:   0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC with 1000000 (10^18) - private key: 56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027
+Network name:     mimo
+Chain ID:         2222
+Currency Symbol:  IMO
+```
+
+Let's use Metamask for this tutorial and connect it to our blockchain
+
+### Importing the Test Private Key
+
+<Admonition type="caution">
+This address derives from a well-known private key. Anyone can steal funds sent to this address.
+Only use it on development networks that only you have access to. If you send production funds to
+this address, attackers will most likely steal them instantly.
+</Admonition>
+
+First, you need to import your airdrop private key into MetaMask. Do this by clicking the profile
+bubble in the top right corner and select `Import account`.
+
+![Import MetaMask Account](/img/metamask-import.png)
+
+Import the well-known private key `0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027`.
+
+![Import Account Private Key](/img/metamask-import-2.png)
+
+Next, rename the MetaMask account to prevent confusion. Switch to the new account and click the
+three dot menu in the top right corner. Select `Account details`. Click the edit icon next to the
+account's name. Rename the account `Test Account ECC` or something that you can easily differentiate with your other wallet names.
+
+![Rename Account](/img/metamask-import-3.png)
+
+Click the checkmark to confirm the change.
+
+### Connect to your ECC
+
+Next, you need to add your ECC to MetaMask's networks.
+
+Click the profile bubble in the top right corner and select `Settings`. Next, click `Networks`. Finally,
+click `Add network`.
+
+![MetaMask Add Network](/img/metamask-network.png)
+
+At the bottom of the next page, select `Add a network manually`. Enter your ECC's details,
+found in the output of your `dijets ecc deploy` [command](#deploying-eec-locally), into
+the form and click `Save`.
+
+![Add ECC Network Details](/img/metamask-network-2.png)
+
+If all worked as expected, your balance should read 1 million tokens. Your ECC is ready for
+action.
+
+![ECC in MetaMask](/img/eec-in-metamask.png)
+
+## Next Steps
+
+Congrats! You just deployed your first EEC. Where you take your EEC, which rule-sets you integrate into it further and which smart contracts you opt to
+deploy on your ECC are just some of the many options at your disposal now. 
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

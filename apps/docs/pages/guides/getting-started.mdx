@@ -1,0 +1,159 @@
+import Layout from '~/layouts/DefaultLayout'
+import Link from 'next/link'
+import { GlassPanel, IconPanel, Button, IconChevronRight } from 'ui'
+
+export const meta = {
+  id: 'getting-started',
+  title: 'Getting Started',
+  description: 'Resources for getting started with Dijets',
+}
+
+<div className="flex flex-col gap-12 my-12">
+
+<div>
+
+  <div className="grid grid-cols-12 gap-6 not-prose">
+    {resources.map((resource) => {
+      return (
+        <Link
+          href={`${resource.href}`}
+          key={resource.title}
+          passHref
+        >
+          <a className={'col-span-12 md:col-span-4'}>
+            <GlassPanel {...resource} background={false} showIconBg={true}>
+              {resource.description}
+            </GlassPanel>
+          </a>
+        </Link>
+      )
+
+})}
+
+  </div>
+
+</div>
+
+</div>
+
+### Tutorials
+
+<div className="grid lg:grid-cols-12 gap-6 not-prose">
+  {webapps.map((item) => {
+    return (
+      <Link href={`/${item.href}`} key={item.title} passHref>
+        <a className={'col-span-4'}>
+          <GlassPanel title={item.title} span="col-span-6" background={false} icon={item.icon}>
+            {item.description}
+          </GlassPanel>
+        </a>
+      </Link>
+    )
+  })}
+</div>
+
+export const webapps = [
+  {
+    title: 'Build & Run Dijets Node',
+    href: '/guides/getting-started/tutorials/run-dijets-node',
+    description:
+      'Learn how to build and run a Dijets Node manually.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Create Local Dijets Network',
+    href: '/guides/getting-started/tutorials/create-local-network',
+    description:
+      'Learn how to build a user management app with NextJS and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Funding an Account for testing',
+    href: '/guides/getting-started/tutorials/funding-test-accounts',
+    description:
+      'Learn how to build a user management app with React and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Reference Workflow',
+    href: '/guides/getting-started/tutorials/reference-workflow',
+    description:
+      'Learn how to build a user management app with Vue 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Intra-Chain DJTX Transfer',
+    href: '/guides/getting-started/tutorials/intrachain-transfer',
+    description:
+      'Learn how to build a user management app with Nuxt 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Multiple Owners Policy DijetsJS',
+    href: '/guides/getting-started/tutorials/multisig-utxos',
+    description:
+      'Learn how to build a user management app with Nuxt 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Transaction Fees in Dijets',
+    href: '/guides/getting-started/tutorials/transaction-fees',
+    description:
+      'Learn how to build a user management app with Nuxt 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Dynamic Gas Fee adjustments',
+    href: '/guides/getting-started/tutorials/dynamic-gas-fee',
+    description:
+      'Learn how to build a user management app with Nuxt 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Using DijetsJS for Dynamic Fees',
+    href: '/guides/getting-started/tutorials/dynamic-fee-js',
+    description:
+      'Learn how to build a user management app with Nuxt 3 and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Utility Chain Integration',
+    href: '/guides/getting-started/tutorials/exchange-integration',
+    description:
+      'Learn how to build a user management app with Flutter and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Misc Tools & Utilities',
+    href: '/guides/getting-started/tutorials/tools-utilities',
+    description:
+      'Learn how to build a user management app with React and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+  {
+    title: 'Blockchain Components',
+    href: '/guides/getting-started/tutorials/blockchain-components',
+    description:
+      'Learn how to build a user management app with React and Supabase Database, Auth, and Storage functionality.',
+    icon: '/docs/img/icons/djtx-icon',
+  },
+]
+
+export const resources = [
+  {
+    title: 'Introduction to Dijets',
+    hasLightIcon: true,
+    href: '/guides/getting-started/introduction',
+    description: 'An introduction to Dijets & its Ternary Chain Faculties of Value, Utility & Methods.',
+  },
+  {
+    title: 'Dijets Platform',
+    hasLightIcon: true,
+    href: '/guides/getting-started/platform',
+    description: "An overview of Dijets Platform architecture.",
+  },
+]
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

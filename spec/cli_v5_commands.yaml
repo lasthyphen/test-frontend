@@ -1,0 +1,10 @@
+clispec: '001'
+flags:
+  - id: help
+    name: --chain-config <string>
+    description: path to the chain configuration
+    default_value: 'false'
+    accepted_values:
+      - id: json
+        name: json
+        type: 'dijets ecc configure --chain-config /Users/Saleem/test/chain-config.json'

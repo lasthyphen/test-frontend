@@ -1,0 +1,41 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'verify-smart-contracts-with-sourcify',
+  title: 'Verify Smart Contracts with Sourcify',
+  description: 'How to Verify Smart Contracts with Sourcify',
+  sidebar_label: 'Overview',
+}
+
+Sourcify is a Solidity source code and metadata verification tool and repository and acts as a base layer allowing other tools to build on top of it.
+
+Along with contract verification through Dijets Utility Chain Explorer's GUI, developers can also use the [Sourcify](https://sourcify.dev/) API verification method to verify their smart contract code.
+
+## Usage Example
+
+Verify your contract using Sourcify:
+
+1. Open the address page for the contract you want to verify, switch to **Code** tab, and then click  **Verify & Publish** button.
+
+![](/docs/img/verify2.png)
+
+1. Choose **Sources and metadata JSON file** option and click the **Next** button.
+
+![](/docs/img/json-files.png)
+
+On the next screen, you will see a drop field where you can add files.
+
+![](/docs/img/drop-files.png)
+
+1. Drag and drop (or click the button to browse and add files from your computer) all **.sol** files used by the target contract you want to verify and the **.json** file containing the contract's metadata. If your contract has linked libraries you should also drag & drop **.json** files for those libraries. Once all the files have been added, start verification by clicking the **Verify & Publish** button.
+
+![](/docs/img/filed-added.png)
+
+After a few seconds your contract should now be verified through Sourcify's API (If verification fails, you will see the reason in the dropzone). Verification metadata will be saved in the explorer's DB and you will see the verified contract page with the link to the same metadata in the Sourcify contract repository.
+
+![](/docs/img/contract-verified.png)
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

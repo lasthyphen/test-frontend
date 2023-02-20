@@ -1,0 +1,303 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'reference-workflow',
+  title: 'Reference workflow for Dijets TestNet',
+  description: 'Workflow demonstrating how you can use a local Dijets test network',
+  sidebar_label: 'Reference Workflow',
+}
+
+## Introduction
+
+Dijets TestNet is the test network for Dijets. It can be used to test DApps
+and/or smart contracts after they've been developed and implemented locally. 
+(You can use [Dijets-Up](create-local-network) to test things locally.) Dijets TestNet is
+typically running the same DijetsNodeGo version as  Dijets Mainnet, but sometimes it is
+also running an unreleased version. In general, you can expect Dijets TestNet's
+behavior to be about the same as Dijets Mainnet. Dijets Explorer and Wallet are both 
+preconfigured to work with Dijets Testnet upon choosing.
+
+This tutorial demonstrates a reference workflow for Dijets TestNet to show how it can
+be used. We'll cover the following in the process:
+
+1. Set up Dijets TestNet on Decypher
+2. Generate a 24 word mnemonic phrase through DijetsJS
+3. Derive external Utility Chain addresses through DijetsJS
+4. Get DJTX from Dijets Faucet
+5. Send DJTX via ethersJS
+6. Examine the resulting transaction on Dijets Unified Explorer
+7. Use a Private Key derived from a mnemonic phrase to sign into Dijets wallet
+
+## Set up Dijets Network on Decypher
+
+- **Network Name**: `Dijets Utility Chain`
+- **RPC URL**: `https://testnet.dijets.io/ext/bc/C/rpc`
+- **ChainID**: `98119`
+- **Symbol**: `DJTX`
+
+## Generate a Mnemonic
+
+To begin, we'll create a mnemonic phrase with
+[DijetsJS](). Mnemonic phrases enable us to encode
+strong security into a human-readable phrase. DijetsJS currently supports 6 languages
+including English, Spanish, Italian, French, Korean,
+and Simplified Chinese. (More languages will be added to the library in the coming weeks)
+
+First, generate a 24 word english
+[BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)-compliant
+mnemonic via DijetsJS.
+
+```typescript
+import { Mnemonic } from "dijets"
+const mnemonic: Mnemonic = Mnemonic.getInstance()
+const strength: number = 256
+const wordlist = mnemonic.getWordlists("english") as string[]
+const m: string = mnemonic.generateMnemonic(strength, randomBytes, wordlist)
+console.log(m)
+// "tumble abuse basic ecology accuse window poem weekend annual oil emerge alley retreat rabbit seed advance define off amused board quick wealth peasant disorder"
+```
+
+## Derive Addresses
+
+After generating a mnemonic we can use DijetsJS to derive
+[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)-compliant
+hierarchical deterministic (HD) Keypairs.
+
+```typescript
+import HDNode from "dijets/dist/utils/hdnode"
+import { Dijets, Mnemonic, Buffer } from "dijets"
+import { EVMAPI, KeyChain } from "dijets/dist/apis/evm"
+import { ethers } from "ethers"
+
+const ip: string = "testnet.dijets.io"
+const port: number = 443
+const protocol: string = "https"
+const networkID: number = 5
+const dijets: Dijets = new Dijets(ip, port, protocol, networkID)
+const utilitychain: EVMAPI = dijets.UtilityChain()
+
+const mnemonic: Mnemonic = Mnemonic.getInstance()
+const m: string =
+  "tumble abuse basic ecology accuse window poem weekend annual oil emerge alley retreat rabbit seed advance define off amused board quick wealth peasant disorder"
+const seed: Buffer = mnemonic.mnemonicToSeedSync(m)
+const hdnode: HDNode = new HDNode(seed)
+
+const keyChain: KeyChain = utilitychain.newKeyChain()
+
+const uAddresses: string[] = []
+
+for (let i: number = 0; i <= 2; i++) {
+  const child: HDNode = hdnode.derive(`m/44'/120'/0'/0/${i}`)
+  keyChain.importKey(child.privateKey)
+  const utilitychainAddress = ethers.utils.computeAddress(child.privateKey)
+  uAddresses.push(utilitychainAddress)
+}
+console.log(uAddresses)
+// [
+//   '0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC',
+//   '0x3507A1131aba9D07714b76Eb8a245F434198690B',
+//   '0xa14dFb7d8593c44a47A07298eCEA774557036ff3'
+// ]
+```
+
+### Generate Private Keys from a Mnemonic
+
+As long as you have the mnemonic phrase, you can re-generate your private keys
+and the addresses they control.
+
+For example, if you want to generate the private keys for the first 3 address in the Utility Chain keychain:
+
+- [0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC](https://utility-explorer.swedencentral.cloudapp.azure.com/address/0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC)
+- [0x3507A1131aba9D07714b76Eb8a245F434198690B](https://utility-explorer.swedencentral.cloudapp.azure.com/address/0x3507A1131aba9D07714b76Eb8a245F434198690B)
+- [0xa14dFb7d8593c44a47A07298eCEA774557036ff3](https://utility-explorer.swedencentral.cloudapp.azure.com/address/0xa14dFb7d8593c44a47A07298eCEA774557036ff3)
+
+you might update the example script above to the following:
+
+```typescript
+const uAddresses: string[] = []
+const privateKeys: string[] = []
+for (let i: number = 0; i <= 2; i++) {
+  // Deriving the _i_th external BIP44 Utility Chain address
+  const child: HDNode = hdnode.derive(`m/44'/120'/0'/0/${i}`)
+  keyChain.importKey(child.privateKey)
+  // Converting the BIP44 addresses to hexadecimal addresses
+  const utilitychainAddress = ethers.utils.computeAddress(child.privateKey)
+  privateKeys.push(child.privateKey.toString("hex"))
+  uAddresses.push(utilitychainAddress)
+}
+console.log({ uAddresses, privateKeys })
+// {
+//   uAddresses: [
+//     '0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC',
+//     '0x3507A1131aba9D07714b76Eb8a245F434198690B',
+//     '0xa14dFb7d8593c44a47A07298eCEA774557036ff3'
+//   ],
+//   privateKeys: [
+//     'cd30aef1af167238c627593537e162ecf5aad1d4ab4ea98ed2f96ad4e47006dc',
+//     'b85479b26bc8fbada4737e90ab2133204f2fa2a9ea33c1e0de4452cbf8fa3be4',
+//     'c72e18ea0f9aa5457396e3bf810e9de8df0177c8e4e5bf83a85f871512d645a9'
+//   ]
+// }
+```
+
+## Get testnet DJTX from Dijets Faucet
+
+We can get 1 DJTX from Dijets faucet. Paste the address into
+[Dijets faucet website](https://faucet.dijets.io). These DJTX are for Dijets
+Testnet and have no monetary value.
+
+![Requesting DJTX](/docs/img/dijets-faucet.png)
+
+The faucet will send 1 DJTX to the address and return a transaction ID
+(txID). This txID can be used with the Dijets Testnet Explorer to learn more about
+the transaction.
+
+![Receiving DJTX](/docs/img/dijets-faucet-txid.png)
+
+### Check the Transaction Details
+
+The txID, `0x9ae2666d9337e4c99d5e762900c26a3d9701b2269565e305b68640bf7ef46abd`,
+can be seen [here](https://utility-explorer.swedencentral.cloudapp.azure.com/tx/0x9ae2666d9337e4c99d5e762900c26a3d9701b2269565e305b68640bf7ef46abd) on Dijets Utility Chain Explorer.
+
+![Transaction details](/docs/img/dijets-explorer-txid.png)
+
+### Get the Balance
+
+We can also use the Dijets Explorer to get the balance for the 1st address [0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC](https://utility-explorer.swedencentral.cloudapp.azure.com/address/0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC).
+
+![1st derived address balance](/docs/img/dijets-tx.png)
+
+Alternatively, we can use [ethersJS](https://docs.ethers.io/v5/) to get the balance.
+
+```typescript
+const ethers = require("ethers")
+const network = "https://testnet.dijets.io/ext/bc/C/rpc"
+const provider = ethers.getDefaultProvider(network)
+const address = "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC"
+
+const main = async (): Promise<any> => {
+  provider.getBalance(address).then((balance) => {
+    // convert a currency unit from wei to ether
+    const balanceInDjtx = ethers.utils.formatEther(balance)
+    console.log(`balance: ${balanceInDjtx} DJTX`)
+    // balance: 2 DJTX
+  })
+}
+
+main()
+```
+
+## Sending DJTX
+
+The faucet sent 1 DJTX to the first address we generated. Let's send DJTX from
+the 1st address to the 2nd address.
+
+```typescript
+// import ethers.js
+import { ethers } from "ethers"
+// network: using the Dijets testnet
+const network = "https://testnet.dijets.io/ext/bc/C/rpc"
+// provider: establish and RPC connection to the network
+const provider = new ethers.providers.JsonRpcProvider(network)
+
+// Sender private key:
+// corresponding address 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
+let privateKey =
+  "cd30aef1af127208c627593537e162ecf5aad1d4ab4ea98ed2f96ad4e47006dc"
+// Create a wallet instance
+let wallet = new ethers.Wallet(privateKey, provider)
+// Receiver Address
+let receiverAddress = "0x3507A1131aba9D07714b76Eb8a245F434198690B"
+// DJTX amount to send
+let amountInDjtx = "0.05"
+// Create a transaction object
+let tx = {
+  to: receiverAddress,
+  // Convert currency unit from ether to wei
+  value: ethers.utils.parseEther(amountInDjtx),
+}
+// Send a transaction
+wallet.sendTransaction(tx).then((txObj) => {
+  console.log(`"tx, https://explorer.dijets.io/tx/${txObj.hash}`)
+  // A transaction result can be checked on Dijets Utility Chain Explorer with a transaction link which can be obtained here.
+})
+```
+
+### Verify Success
+
+We can verify that the transaction,
+`0xafd787d60483adabb48479de36e83943c374476793a66177be4a1a8601e74414`, was
+successful using the Dijets Testnet Explorer. The transaction can be seen
+[here](https://utility-explorer.swedencentral.cloudapp.azure.com/tx/0xafd787d60483adabb48479de36e83943c374476793a66177be4a1a8601e74414).
+
+![Transaction details](/docs/img/dijets-tx2.png)
+
+#### Get the Balance
+
+We can also use the Dijets Explorer to get the balance for the 2nd address—[0x3507A1131aba9D07714b76Eb8a245F434198690B](https://utility-explorer.swedencentral.cloudapp.azure.com/address/0x3507A1131aba9D07714b76Eb8a245F434198690B).
+
+Alternatively, we can use ethersJS to get the balance.
+
+```typescript
+const ethers = require("ethers")
+const network = "https://testnet.dijets.io/ext/bc/C/rpc"
+const provider = ethers.getDefaultProvider(network)
+const address = "0x3507A1131aba9D07714b76Eb8a245F434198690B"
+
+const main = async (): Promise<any> => {
+  provider.getBalance(address).then((balance) => {
+    // convert a currency unit from wei to ether
+    const balanceInDjtx = ethers.utils.formatEther(balance)
+    console.log(`balance: ${balanceInDjtx} DJTX`)
+    // balance: 0.02 DJTX
+  })
+}
+
+main()
+```
+
+### Sign Into the Web Wallet
+
+Lastly, we can [use the mnemonic to generate a private
+key](#generate-private-keys-from-a-mnemonic) to access the [Dijets Web
+Wallet](https://wallet.dijets.io). We'll see that it has the DJTX balance and
+that it derives the hexadecimal address from the private key.
+
+Use the private key to access the Web Wallet.
+
+![Access the wallet](/docs/img/dijets-wallet1.png)
+
+The balance is correct and the address is the 1st derived address.
+
+![Web wallet balance](/docs/img/dijets-wallet2.png)
+
+## Summary
+
+The Dijets Testnet plays a critical role in testing dapps, smart
+contracts and financial products before deploying to the Mainnet. Tooling like
+DijetsJS, the public API, faucet, and explorer helps to ensure that your
+testing and QA environment is close to Mainnet so that you can be confident when
+you launch on Mainnet.
+
+## Resources
+
+For additional and valuable resources please see below.
+
+### Faucet
+
+The [Dijets Faucet](https://faucet.dijets.io) can send DJTX to Value Chain or Utility Chain
+addresses for testing purposes. (Testnet Djtx has no value.)
+
+### Wallet
+
+[Dijets Web Wallet](https://wallet.dijets.io) is a simple, secure,
+non-custodial wallet for storing Dijets assets. It supports Dijets Mainnet, Dijets TestNet and
+custom networks.
+
+### Explorer
+
+[Dijets Explorer](https://explorer.dijets.io) allows you to explore the network, transactions, addresses, smart contracts & much more.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

@@ -1,0 +1,87 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'serialisation-primitives',
+  title: 'Smart Contracts',
+  description: 'Smart Contract breakdown',
+  sidebar_label: 'Overview',
+}
+
+Example code of a pragma instruction in a smart contract
+
+```js
+pragma solidity >=0.8.4;
+```
+
+
+
+Example code for name definition in a smart contract
+
+```js
+contract MyCoin {
+```
+
+
+
+Code of a mapping that acts as Hash for key/value pairs in a smart contract
+
+```js
+mapping (address => uint) balances;
+```
+
+
+
+Example code of a constructor in a smart contract
+
+```js
+constructor()  {
+        balances[tx.origin] = 10000;
+}
+```
+
+
+
+How to move tokens from one address to another address in a smart contract
+
+```js
+function 
+  sendCoin(address receiver, uint amount) 
+
+  public returns(bool success) {
+
+    if (balances[msg.sender] < amount) return false;
+
+    balances[msg.sender] -= amount;
+    balances[receiver] += amount;
+    emit Transfer(msg.sender, receiver, amount);
+    return true;
+  }
+```
+
+
+
+How to check the balance of an address in a smart contract
+
+```js
+function getBalance(address addr) public view returns(uint) {
+    return balances[addr];
+}
+```
+
+
+
+How to call methods on a contract deployed on Dijets Utility Chain
+
+```js
+function getTestDijetsCoinContract(web3, from, address) {
+  const abi = JSON.parse(fs.readFileSync("./TestDijetsCoin_sol_TestDijetsCoin.json", { encoding : 'utf-8' }));
+
+
+  return new web3.eth.Contract(abi, address, { from : from }); 
+}
+```
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

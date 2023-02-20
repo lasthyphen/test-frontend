@@ -1,0 +1,146 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'serialisation-primitives',
+  title: 'Create an ERC20 Token',
+  description: 'How to create an ERC-20 Token on Dijets Utility Chain',
+  sidebar_label: 'Overview',
+}
+
+# Create an ERC-20 Token Using Solidity
+
+In this tutorial we will be creating our own mintable ERC-20 token and will mint it to
+any address we want. The token will be generated on Dijets Utility Chain.
+
+The article focuses on deploying a smart contract written with Solidity to
+Dijets. This is the feature that Dijets provides us - to be able to deploy
+any smart contract to the chain and no requirement for a new language specific
+contract concept to interact. Let’s look at how to create an ERC-20 contract and
+deploy it on Dijets Utility Chain.
+
+## Set up MetaMask
+
+The first thing we should set is a MetaMask wallet address.
+
+Click on MetaMask icon on the browser and select the network drop-down menu.
+Here we can connect to Dijets Utility Chain. Click "Custom RPC".
+
+Fill in the fields with the information provided below.
+
+- **Network Name**: Dijets Utility Chain
+- **New RPC URL**: https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc
+- **ChainID**: `98200`
+- **Symbol**: DJTX
+- **Explorer**: [`https://utility-explorer.swedencentral.cloudapp.azure.com/`](https://utility-explorer.swedencentral.cloudapp.azure.com/)
+
+After setting up all the parameters correctly we should have our Metamask connected to Dijets Utility Chain and a wallet address we can use to deploy our contract.
+
+## Fund Your Utility Chain Address
+
+For funding on Dijets Testnet, you can use the Test Network Faucet. Navigate
+to [Dijets Faucet](https://faucet.dijets.io) and paste your
+Utility Chain address.
+
+## Create Mintable Token
+
+Now, we can create our mintable token on Tinker. Open Tinker on your browser or go
+to [this
+link](https://tinker.dijets.io/dijets-ide/).
+
+On this page, first, click "SOLIDITY" from "Featured
+Plugins" and then click the "New File" button. When you click the New File
+button, you will see a pop-up that requires a file name. You can choose a name
+or leave the default.
+
+Since we will use an ERC-20 contract from
+[OpenZeppelin](https://openzeppelin.com/contracts/), just paste this line to the
+file and save.
+
+```jsx
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
+```
+
+After saving the file, we will see a bunch of files being imported into Tinker.
+These files are imported from a GitHub contract repository
+to Tinker via a URL-link with an import statement.
+
+We have ERC20PresetMinterPauser.sol file in the presets. This file is from
+OpenZeppelin's repo and follows the ERC20 standards with minting functionality.
+
+The minter functionality declares the deployer (unless specified) of the contract
+as its owner thus giving him/her the authority to mint tokens.
+
+Since in this example we are deploying the contract ourselves using our private key and address,
+we will be the owner of the contract and thus have the
+ability to mint the tokens.
+
+## Deploy the Contract
+
+Open the tab with the label `Compiler` and select the solidity version that
+matches with the solidity version written in file as `pragma solidity …..`. The
+version should be equal to or higher than the file’s version. For example, in our
+file the version stated on the top of the contract is `pragma solidity ^0.6.0`
+so the required version we need to pick should be 0.6.0 or
+higher.
+
+After checking the solidity version click the compile button. If you did not
+change anything in the file, or the solidity version is not wrong, the contract
+should compile without any errors.
+
+Now click the tab with label `Deploy & run transactions`. Here before
+deploying our contract, we should change the environment. Click the
+environment tab and select "Injected Web3." If a Decypher or Metamask pop-up shows up and asks you to
+connect the account, then please go ahead and click connect. Once connected you should see your
+address listed under environment.
+
+The last step before deployment is to select the correct contract from a dropdown section
+placed just above the `Deploy` button. Select the contract named `ERC20PresetMinterPauser.sol`.
+You will see a section asking you to fill out the main details of your token, often called
+the constructor arguments.
+
+For this example we will name the token "test" with the symbol
+`tst`. Click the `Transact` button.
+
+A pop-up from Decypher or Metamask (depending upon what you are using) will ask you for signing
+and confirming the transaction. Once you confirm the pop-ups, the transaction will be execcuted and the smart
+contract will be deployed to Dijets Utility Chain.
+
+Now that the contract has been deployed, we can start interacting with it.
+
+## Interact with Token
+
+In order to interact with the token contract we first need to find its address called the Contract Address.
+You can find the contract address by going to Tinker's console and
+clicking the arrow to expand the text. You should now be able to see the transaction hash of the contract we deployed earlier. 
+Copy the transaction hash.
+
+Paste the copied transaction hash into the [Explorer's Search Bar](https://utility-explorer.swedencentral.cloudapp.azure.com/) and press enter.
+
+This page is the transaction summary page detailing all the information about the transaction that deployed our Token contract.
+
+The first address on the page is the wallet address that created the token and deployed the contract and the second address is
+the contract address for the token `test`. 
+
+After deployment a new section named `Deployed Contracts` should now be available on Tinker.
+
+This section contains all of the functions that we call and use to interact with our token
+contract. Let's use the `mint` function to get some tokens minted to our address.
+
+Click the arrow beside the mint method and enter your address and the amount of tokens you wish to mint
+in `wei`. For example, if you wish to mint 1000 `tst` tokens, then the amount in wei for `1000` should be entered 
+as `1000000000000000000000`
+
+## Add Token to MetaMask
+
+Even though we have minted `1000 tst` tokens to our address. The token will only
+be visible in Metamask once we specify its contract address and import it.
+
+To import our 1000 tokens we just minted, click `Import Tokens` tab under `Assets` in Metamask.
+Under Custom Token -> Token Contract address paste the contract address of the token we copied earlier.
+
+The rest of the details like the token name `test` and its symbol `tst` will automatically get populated.
+Click Next and you should now be able to see your 1000 test tokens within the Metamask wallet.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

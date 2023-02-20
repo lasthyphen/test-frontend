@@ -1,0 +1,299 @@
+import Layout from '~/layouts/DefaultGuideLayout-custom'
+import Badge from 'ui'
+
+export const meta = {
+  id: 'ecc-lifecycle',
+  title: 'Build an ECC',
+  description: 'Learn how to build an ECC',
+  sidebar_label: 'Overview',
+  hide_table_of_contents: true,
+}
+
+<div className="flex items-start gap-6 not-prose" id="ecc-lifecycle">
+  <img src="/docs/img/icons/menu/dijets-cli-tools.svg" className="w-14 h-14 rounded" />
+  <div className="flex flex-col gap-2">
+    <h1 className="text-3xl text-scale-1200 m-0">Dijets-ECC</h1>
+    <h2 className="text-base font-mont text-scale-1100">Deploy Enterprise Consortia Chains</h2>
+  </div>
+</div>
+
+<div className="max-w-7xl">
+
+  This tool and the corresponding documentation is currently under heavy development.
+
+  The commands you see listed below may change with the upcoming release.
+</div>
+
+
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        use dijets-ecc to deploy custom chains
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc --help
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full mb-16">
+<CliGlobalFlagsHandler />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        helps deploy Enterprise Consortia Chains
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc [sub-command][flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler2 />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc addProperties</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        add qualification properties for members
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc addProperties [ecc-name] [flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler3 />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc configure</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        allows you to set file path for ECC config
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc configure [ecc-name] [flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler4 />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc create</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        builds a new genesis file to configure your ECC.
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc create [ecc-name] [flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler5 />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc delete</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        deletes an existing ECC configuration.
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc delete [ecc-name] [flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler6 />
+</div>
+<article className="divide-y"></article>
+<RefSubLayout.EducationRow>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+  <div class="block gap-3 items-center text-scale-1200 scroll-mt-24 mt-8 mb-0">
+    <div class="flex items-center">
+    <span class="relative flex items-center justify-center h-5 w-5">
+        <img class="w-5" src="/docs/img/icons/menu/cli-tools.svg"></img>
+    </span>
+    <span class="max-w-xl ml-3 text-3xl font-medium font-mont">dijets-ecc deploy</span>
+  </div>
+    <span>
+      <div class="text-xs pr-3 pb-2 tracking-wide text-scale-1000">
+        deploys ECC configuration to specified dijets network
+      </div>
+    </span>
+  </div>
+</div>
+  <RefSubLayout.Examples>
+<div className="w-full py-4 lg:py-8 pt-2 pb-0">
+    <Tabs
+      size="small"
+      type="underlined"
+      defaultActiveId="npm"
+    >
+      <TabPanel id="npm" label="Basic Usage">
+
+        ```sh Terminal
+        dijets-ecc deploy [ecc-name] [flags]
+        ```
+
+      </TabPanel>
+    </Tabs>
+  </div>
+  </RefSubLayout.Examples>
+</RefSubLayout.EducationRow>
+<div className="w-full">
+<CliGlobalFlagsHandler7 />
+</div>
+<article className="divide-y"></article>
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

@@ -1,0 +1,90 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'introduction',
+  title: 'Introduction to Dijets',
+  description: 'Dijets features',
+}
+
+Dijets is an Ecosystem of Decentralised Ternary Chain Ledgers built to power its primary faculties of:
+
+### Value
+Next-gen financial products, protocols and exchange of value.
+
+### Utility 
+Smart contracts platform built for the scale of global adoption.
+
+### Methods
+Institutional grade blockchain infrastructure.
+
+## Ternary Chain Ledgers
+
+Dijets Ternary Chain Ledger system features 3 Primary interoperable Blockchains, each built from the ground up to serve its specific purpose within the Ecosystem.
+
+### Value Chain
+
+Dijets Value Chain acts as the primary conductor of value exchange within the Ecosystem. The VC also functions as a decentralized platform for creating and trading real world assets/resources as smart digital assets (for example, equity stakes, bonds, shareholdings etc). These smart digital assets can be configured with a set of rules that govern their behavior upon creation. [Value Chain API](/docs/guides/node-apis/value-chain-api).
+
+### Utility Chain - EVM
+
+Dijets Utility Chain allows for the creation of smart contracts using Utility Chain’s API. [Utility Chain API](/docs/guides/node-apis/utility-chain-api).
+
+The UC is an instance of Ethereum Virtual Machine powered by Dijets protocol making it interoperable with other active primary chains on Dijets. This means that any asset (ERC20, ERC721 etc) can be bridged to Dijets Network to take advantage of its sub-seecond finality and extremely low and flat transaction fees.
+
+Ethereum developers can quickly build on Dijets as Solidity is fully compatible with the Utility Chain.
+
+### Method Chain
+
+The Method Chain is the chain management layer for blockchains and their metadata in Dijets. It coordinates validators, keeps track of active primary & child chains, and enables the creation of new enteprise and private blockchains. [Method Chain API](/docs/guides/node-apis/method-chain-api).
+
+
+## Features
+
+### Transaction Finality
+
+All transactions in Dijets are permanently confirmed in less than a second.
+
+### Scalibility
+
+Capable of processing 5,200 transactions per second. Note that when talking about scalibility speed alone isn't enough. What’s equally important is latency. 
+
+It’s pointless to claim that a network can process more transactions than VISA if each one of the processed transaction is then taking an additional 30 seconds or a whole minute to get finalised. See below for a quick latency comparison or the time it takes for a transaction to be considered irreversibly finalised in different blockchains.
+
+**Transaction Finality**
+
+| Blockchain       | Tx finality   |
+| ---------------- | ------------- |
+| Bitcoin          | 60 minutes    |
+| Ethereum 2.0     | 6 minutes     |
+| PolkaDot         | 60 seconds  (60 mins to external chains)      |
+| Dijets           | < 1 second    |
+
+### Security
+
+Dijets ensures stronger security guarantees well-above the typical 51% standard of other blockchain networks.
+
+### Modularity
+
+Users can easily create custom blockchains and Businesses can create Enterprise Chains with almost any type of arbitrary logic.
+
+### Smart Contracts
+
+Dijets Utility Chain was specifically built as an instance of EVM to be fully compatible with all the commonly used Ethereum tools like Remix, Metamask, truffle etc. It supports the creation of Solidity smart contracts just as in Ethereum but with the added benefit of sub-second transaction finality and negligible transaction fees.
+
+### Private & Enterprise Consortia Chains
+
+Whether you are an enthusiast or a Business Organisation, building your own private blockchain is one of the easiest and hassle-free processes in Dijets.
+
+### Enabling Technology
+
+Dijets is built around the idea of enabling. It is a utility-first Ecosystem of decentralised network, DApps and services that empowers its users by enabling use-cases for distributed ledger technology like never before. 
+
+Whether its creating and trading digital smart assets with complex, custom rule-sets or the ability to enable its users to commoditise their data, Dijets aim is to bring the power of distributed systems to the masses in truly unique and useful ways.
+
+### Sustainable by Design
+
+Dijets is green by design. It is far more energy efficient than other blockchains due to its energy-efficient proof-of-stake consensus mechanism.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

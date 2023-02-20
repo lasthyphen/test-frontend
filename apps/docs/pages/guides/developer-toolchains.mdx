@@ -1,0 +1,76 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+import Link from 'next/link'
+import { GlassPanel, IconPanel, Button, IconChevronRight } from 'ui'
+
+export const meta = {
+  id: 'developer-toolchains',
+  title: 'Developer Toolchains Overview',
+  description: 'Learn all about the Developer toolkits compatible with Dijets',
+  hide_table_of_contents: true,
+}
+
+{/* start container */}
+
+<div className="flex flex-col gap-12 my-12">
+
+<div className="space-y-8">
+  <div className="
+    border border-scale-400
+    relative overflow-hidden
+    grid grid-cols-14
+    rounded-lg
+    px-8 md:px-12 py-5 md:py-12
+    ">
+    <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
+      <img className="hidden lg:visible absolute right-0 top-0 w-[500px]" src="/docs/img/cards/dark.png" />
+      <div className="">
+        <h3 className="text-2xl m-0 mb-3">Guides to common toolkits</h3>
+
+        Developers can use all the usual Ethereum developments toolkits to deploy DApps, Smart Contracts
+        on Dijets Utility Chain.
+
+        <div className="mt-6">
+          <div className="hidden">
+          <Button size="small">Get started</Button>
+          </div>
+          <div className="grid grid-rows-2 md:grid-rows-3 gap-3 md:gap-6">
+            <Link href={`/guides/developer-toolchains/foundry-dijets-uc`} passHref>
+              <a className="no-underline">
+                <IconPanel title="Use Foundry with Dijets Utility Chain" icon="/docs/img/icons/foundry-icon" />
+              </a>
+            </Link>
+            <Link href={`/guides/developer-toolchains/hardhat-dijets-uc`} passHref>
+              <a className="no-underline">
+                <IconPanel title="Use Hardhat with Dijets Utility Chain" icon="/docs/img/icons/hardhat-icon" />
+              </a>
+            </Link>
+            <Link href={`/guides/developer-toolchains/truffle-dijets-uc`} passHref>
+              <a className="no-underline">
+                <IconPanel title="Use Truffle with Dijets Utility Chain" icon="/docs/img/icons/truffle-icon" />
+              </a>
+            </Link>
+            <Link href={`/guides/developer-toolchains/verify-smart-contracts-on-explorer`} passHref>
+              <a className="no-underline">
+                <IconPanel title="Verify your Smart Contract on UC Explorer" icon="/docs/img/icons/explorer-icon" />
+              </a>
+            </Link>
+            <Link href={`/guides/developer-toolchains/verify-smart-contracts-with-sourcify`} passHref>
+              <a className="no-underline">
+                <IconPanel title="Verify your Smart Contract using Sourcify" icon="/docs/img/icons/sourcify-icon"/>
+              </a>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{/* end of container */}
+
+</div>
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

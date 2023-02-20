@@ -1,0 +1,43 @@
+clispec: '001'
+flags:
+  - id: testnet
+    name: --testnet testnet
+    description: join dijets testnet
+    default_value: 'false'
+  - id: help
+    name: -h, --help
+    description: help for addValidator
+    default_value: 'false'
+  - id: key
+    name: -k, --key <string>
+    description:  select the key to use
+    default_value: 'false'
+  - id: ledger
+    name: -g, --ledger  
+    description: use ledger instead of key
+    default_value: 'false'
+  - id: mainnet
+    name: --mainnet mainnet
+    description: join on mainnet
+    default_value: 'false'
+  - id: nodeID
+    name: --nodeID <string>
+    description: set the NodeID of the validator to add
+    default_value: 'false'
+  - id: outputTx
+    name: --output-tx-path <string>
+    description: file path of the add validator tx
+    default_value: 'false'
+  - id: stakingduration
+    name: --staking-period duration 
+    description: period validator will be staking for
+    default_value: 'false'
+  - id: starttime
+    name: --start-time string 
+    description: UTC start time for validating
+    default_value: 'false'
+flags2:
+  - id: testnet
+    name: --testnet testnet
+    description: join dijets testnet
+    default_value: 'false'

@@ -1,0 +1,109 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'atomic-transaction-format',
+  title: 'Add Dijets Network to your DApps',
+  description: 'How to add Dijets Network programmatically to your DApps',
+  sidebar_label: 'Overview',
+}
+
+This guide shows how as a developer you can programmatically add Dijets Network to your DApps,
+and in doing so make your onboarding process even more smoother for users.
+
+## MetaMask
+
+Adding a new network to MetaMask is not a trivial task for people that are not technically savvy. It can lead to more confusion and even worse, loss of funds.
+To help easier onboarding of users to your application it is useful to simplify that process as much as possible.
+This tutorial will show how to build a simple button in your front-end
+application that will automate the process of adding Dijets Network to
+MetaMask, the most widely used web 3.0 wallet & browser.
+
+### EIP-3035 & MetaMask
+
+[EIP-3035](https://eips.ethereum.org/EIPS/eip-3085) is an [Ethereum Improvement
+Proposal](https://eips.ethereum.org/) that defines an RPC method for adding
+Ethereum-compatible chains to wallet applications.
+
+Since March 2021 MetaMask has implemented EIP 3035 as part of their [Custom Networks API](https://consensys.net/blog/metamask/connect-users-to-layer-2-networks-with-the-metamask-custom-networks-api/).
+
+Before we begin the implementation, let's look at how this all works.
+
+### Data Structures
+
+To add Dijets network to MetaMask, we need to prepare the data structures
+that will contain all the necessary data about the network.
+
+Main network data:
+
+```javascript
+export const DIJETS_MAINNET_PARAMS = {
+  chainId: "0x17F98",
+  chainName: "Dijets Utility Chain",
+  nativeCurrency: {
+    name: "Dijets",
+    symbol: "DJTX",
+    decimals: 18,
+  },
+  rpcUrls: ["https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc"],
+  blockExplorerUrls: ["https://utility-explorer.swedencentral.cloudapp.azure.com/"],
+}
+```
+
+### Adding the Network
+
+To add the network to MetaMask, we need to call the `wallet_addEthereumChain`
+method, exposed by the web3 provider.
+
+```javascript
+function addDijetsNetwork() {
+  injected.getProvider().then((provider) => {
+    provider
+      .request({
+        method: "wallet_addEthereumChain",
+        params: [DIJETS_MAINNET_PARAMS],
+      })
+      .catch((error: any) => {
+        console.log(error)
+      })
+  })
+}
+```
+
+Here `injected` is initialized as a `web3-react/injected-connector` which is used to
+interface with MetaMask APIs. Usage for other popular web frameworks is similar.
+
+Typical usage pattern would be to expose a button calling that method if you get
+errors like `Wrong Network` or `Error connecting` when attempting to establish a
+connection to MetaMask.
+
+### User Experience
+
+When users first come to your DApp they are prompted to approve connection to
+MetaMask. Once the user approves the connection, and if no successful web3 network
+connection is detected, you can present them with a dialog asking them to confirm switching to
+a different network:
+
+![wrong network](/docs/img/wrong-network-button.png)
+
+If they press the button, they are shown a dialog from MetaMask asking for approval to add the new network:
+
+![add a network](/docs/img/add-dijets-network.png)
+
+If they approve, your app will be connected to Dijets Network.
+Your users won't need to fill in long URLs or worry about inputting wrong information.
+A seamless process designed to help your users avoid any confusion and hassle.
+
+## Conclusion
+
+Manually adding a new network is a
+hurdle that a certain percentage of your potential users will not be able to
+clear. Removing that requirement is a simple step that will enhance their
+experience and enable more users who get to actually use your dapp.
+
+If you have any questions, problems, or ideas on how to improve, or simply want
+to join our developer community, drop in and say hello on
+[Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org).
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

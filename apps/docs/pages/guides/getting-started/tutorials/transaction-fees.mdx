@@ -1,0 +1,134 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'transaction-fees',
+  title: 'Fee Schedule of Dijets Ternary Chains',
+  description: 'Learn all about the transactions fees and their types on Dijets',
+  sidebar_label: 'Transaction Fee',
+}
+
+### Introduction
+
+In order to prevent the network being spammed, transactions on Dijets require the payment of a
+a minimal transaction fee. The fee is paid in DJTX. There are no miners in Dijets so the ransaction fee is instead burned
+(destroyed forever by sending the amount to a blackhole address). This burning of the transaction fees avoids the common pitfalls of Gas Wars & front running
+essentially turning Dijets into a deflationary cryptocurrency.
+
+When you issue a transaction through Dijets's API, the transaction fee is
+automatically deducted from one of the addresses you control.
+
+## Ternary Chains Fee Schedule
+
+Different types of transactions require payment of a different transaction fee.
+This table shows the transaction fee schedule:
+
+| Blockchain          | Transaction Type          | Fees        |
+| ------------------- | ------------------------- | ----------- |
+| Method Chain        | Create a Subnetwork       | 1 DJTX      |
+| Method Chain        | Create a Blockchain       | 1 DJTX      |
+| Method Chain        | Add a Validator           | 0 DJTX      |
+| Method Chain        | Add a Delegator           | 0 DJTX      |
+| Method Chain        | Importing DJTX            | 0.001 DJTX  |
+| Method Chain        | Exporting DJTX            | 0.001 DJTX  |
+| Value Chain         | Transfer/Send             | 0.001 DJTX  |
+| Value Chain         | Create a Smart Asset      | 0.01 DJTX   |
+| Value Chain         | Mint an Asset             | 0.001 DJTX  |
+| Value Chain         | Importing DJTX            | 0.001 DJTX  |
+| Value Chain         | Exporting DJTX            | 0.001 DJTX  |
+| Utility Chain       | Transfer/Send             | >= 0.001485*|
+
+*Dijets Utility Chain is an EVM instance with variable gas fees. See below for more details.
+
+### Dijets Utility Chain Fees
+
+Dijets Utility Chain uses an algorithm to determine the "base fee" for a
+transaction. The base fee increases when network utilisation levels are above the threshold
+and decreases when network utilisation levels are below the threshold.
+
+### Dynamic Fee Transactions
+
+Transaction fees for non-atomic transactions are based on [Ethereum's EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)
+style Dynamic Fee Transactions, which consists of a **gasFeeCap** and **gasTipCap**
+
+The fee cap specifies the maximum price the transaction is willing to pay per
+unit of gas. The tip cap specifies the maximum
+amount above the base fee that the transaction is willing to pay per unit of
+gas. Therefore, the effective gas price paid by a transaction will be
+`min(gasFeeCap, baseFee + gasTipCap)`. 
+
+<Admonition type="info">
+The Gas Tip Cap is also known as the Priority Fee.
+</Admonition>
+
+Unlike in Ethereum, where the priority
+fee is paid to the miner that produces the block (resulting in Gas wars and front running), in Dijets both the base fees
+and the priority fees are burned forever. For legacy transactions, which only specify a
+single gas price, the gas price serves as both the gas fee cap and the gas tip
+cap.
+
+Users can make a simple API call to [`eth_baseFee`]()
+method to estimate the base fee for upcoming block before submitting a transaction. 
+
+<Admonition type="caution">
+During or before constructing or executing your transaction, if more blocks are produced
+then the base fee could be different from the base fee estimated by the API
+call. It is thus important to treat this value just as an estimate.
+</Admonition>
+
+Use the
+[eth_maxPriorityFeePerGas]()
+API call to estimate the priority fee needed to be included in the next block. This API
+call looks at the most recent blocks to determine what tips have been paid by
+recent transactions for them to be included in the block.
+
+Transactions are ordered by the priority fee, then the timestamp (oldest first).
+
+Based off of this information, you can specify the **gasFeeCap** and **gasTipCap**
+to your liking based on how you prioritize getting your transaction included as
+quickly as possible vs. minimizing the price paid per unit of gas.
+
+#### Base Fee
+
+The base fee can go as low as 25 nDJTX (Gwei) and has no upper bound. You can
+use the [`eth_baseFee`]() and
+[eth_maxPriorityFeePerGas]()
+API methods, or Dijets Utility Chain explorer for [Gas
+Tracker](https://utility-explorer.swedencentral.cloudapp.azure.com), to estimate the gas price to use in
+your transactions.
+
+## Atomic Transaction Fees
+
+#### What is an Atomic Transaction
+
+An Atomic Transaction in Dijets is a type of transaction used to move funds between Dijets Ternary Chain Ledgers. There are two primary types
+of Atomic Transactions - ImportTx and ExportTx.
+
+Utility Chain's atomic transactions (that is imports and exports from/to other chains)
+charge dynamic fees based on the amount of gas used by the transaction and the
+base fee of the block that includes the atomic transaction.
+
+Gas Used:
+
+| Utility Chain Item  | Gas          |
+| ------------------- | ------------ |
+| Unsigned Tx Byte    | 1            |
+| Signature           | 1000         |
+| Per Atomic Tx       | 10000        |
+
+We can derive from the above table that the gas used by an atomic transaction in Dijets is `1 * len(unsignedTxBytes) +
+1,000 * numSignatures + 10,000`
+
+The TX fee additionally takes the base fee into account. Due to the fact that
+atomic transactions use units denominated in 9 decimal places, the base fee must
+be converted to 9 decimal places before calculating the actual fee paid by the
+transaction. Therefore, the actual fee is: `gasUsed * baseFee (converted to 9
+decimals)`.
+
+## Next
+
+- Learn how to Adjust Gas Prices during high network activity [Adjusting Gas Prices](dynamic-gas-fee).
+- Learn how to send a transaction with Dynamic Fees using DijetsJS [DijetsJS](dynamic-gas-fee)
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

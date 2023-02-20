@@ -1,0 +1,153 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'ecc-lifecycle',
+  title: 'Build an ECC',
+  description: 'Learn how to build an ECC',
+  sidebar_label: 'Overview',
+}
+
+Dijets makes it simple to create ECCs that can instantaneously confirm transactions and process thousands of transactions per second, 
+vastly outperforming Ethereum and many other decentralized blockchain platforms.
+
+# Build Your First ECC
+
+The first step of building your ECC is to familiarise yourself with [Dijets-CLI]().
+
+Dijets-CLI is a command line tool that gives developers access to all of ECC's composability, deployment, configuration and customisability.
+
+Once installed, the Dijets-CLI binary makes the whole process of building & deploying ECCs on Dijets network a simple matter of issuing a few commands.
+This powerful CLI tool specializes in helping developers develop, simulate, stress test, build and deploy ECCs with various different default configurations
+or help completely tailor-made VMs.
+
+This tutorial will walk you through the process of using Dijets-CLI for the first time by creating an ECC,
+deploying it to the local test network, and finally connecting your newly created network to Metamask.
+
+<Admonition type="info">
+
+  Remember to add Dijets-CLI to your $GOPATH Once its in your path you can call the program anywhere from your system
+  simply with just the word `dijets`
+
+  </Admonition>
+
+You can add Dijets-CLI to your path by running:
+
+```bash
+export PATH=~/bin:$PATH
+```
+
+To add it to your path permanently, add the above export command to your shell initialisation script
+(ex: .bashrc or .zshrc).
+
+## Create Your ECC Configuration
+
+There are a number of pre-built VMs that
+an organisation can choose from or build an entirely bespoke VM with custom confirguration. For this tutorial we will be building an ECC based on the Ethereum Virtual Machine (EVM).
+Much like Dijets Utility Chain, since this ECC implements EVM, it supports Solidity smart contracts as well as most other Ethereum client functionality out of the box.
+
+<Admonition type="info">
+
+  Dijets Utility Chain is also an instance of Ethereum Virtual Machine with some refinements to suit the Primary Network requirements.
+
+  </Admonition>
+
+## Notable features of the ECC
+
+1. Supports most of Ethereum's default API namespaces like `eth` `personal` `txpool` `debug` etc.
+1. Fully compatible with almost all of Ethereum tooling, including Remix, Metamask and Truffle.
+1. Configurable Gas fees and limits.
+1. Supports Airdrop functionality (Airdrops can be used to assign an amount of the ECCs native token exclusively to whitelisted members of the organisation).
+1. Tokenomics with custom fee tokens.
+1. Multiple stateful pre-compiles. [Learn more about the Pre-Compiles]()
+1. Fully confirgurable Genesis.
+
+
+To start building your ECC, we need to submit our very first command to `Dijets-CLI`
+
+The CLI tool then
+starts collecting all the information required to create a definitive configuration of our ECC. This configuration or the blueprint of your ECC will form
+the basis to how your blockchain behaves.
+
+There are a number of tools contained within Dijets-CLI for developing and deploying ECCs. Each one adding more depth and refinement to your configuration. 
+The `ECC-Doctor` tool for example simplifies the builds by walking you through each step of the process of creating your ECC. 
+
+Let's get started by
+first picking the name for our ECC. This tutorial uses `Mimo` as the name of the ECC, but feel free to substitute that
+with any name you like. Once you've decided on the name of your ECC and network, run
+
+`dijets ecc create mimo`
+
+This command invokes `Dijets-CLI` CLI to start gathering all the information it needs to build the
+configuration for your ECC.
+
+The CLI tool starts with asking you a series of questions.
+The following section walks you through each of those questions.
+
+### Choose Your VM
+
+Select `ECC-EVM`.
+
+### Enter Your ECC's ChainID
+
+Choose a positive integer for your EVM-style ChainID.
+
+In production environments, this ChainID needs to be unique and not shared with any other chain.
+Because this is a development ECC, feel free to pick any number. Do not pick
+ChainIDs such as 1 (Ethereum) or 98200 (Dijets Utility Chain) as those may cause issues with other
+tools.
+
+### Token Symbol
+
+Enter a string to name your ECC's native token. The token symbol doesn't necessarily need to be unique.
+Example token symbols are DJTX, ROG, DCY MST etc
+
+### ECC-EVM Version
+
+Select `Use latest version`.
+
+### Gas Fee Configuration
+
+This question determines how to set gas fees on your ECC.
+
+Select `Low disk use / Low Throughput 1.5 mil gas/s (This is the same setting Dijets Utility Chain uses)`.
+
+### Airdrop
+
+For the purpose of simplicity in this tutorial, we will:
+
+Select `Airdrop 1 million tokens to the default address (do not use in production)`.
+
+<Admonition type="info">
+The default address the CLI mentions above is the account address strictly used for testing only. The private key of the address is well-known,
+and can be found all across these documentation so DO NOT send any real funds to this address. Attackers
+would most likely drain all the funds instantly.
+</Admonition>
+
+When building an ECC for production or for more indepth testing, select `Customize your airdrop` to distribute the native tokens
+to other addresses.
+
+### Precompiles
+
+Precompiles help customise the behavior of your ECC. They're strictly an
+advanced feature, so we can safely select `No` for now.
+
+### Wrapping Up
+
+If all worked successfully, the command prints `Successfully created ECC configuration`.
+
+By successfully creating your ECC's configuration. You've finished the building process and can now go ahead and deploy
+it to start interacting with your new blockchain.
+
+<video width="100%" autoPlay="autoplay" muted playsInline controls={true}>
+  <source
+    src="/docs/videos/create-ecc.mov"
+    type="video/mp4"
+    muted
+    playsInline
+  />
+</video>
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

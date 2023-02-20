@@ -1,0 +1,43 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'metrics-api',
+  title: 'Metrics API',
+  description: 'This guide explains how to make calls to APIs exposed by Dijets nodes.',
+}
+
+The API allows clients to get statistics about a node’s health and performance.
+
+<Admonition type="info">
+
+This API set is for a specific node, it is unavailable on the [public server](../public-api-server.md).
+
+</Admonition>
+
+## Endpoint
+
+```text
+/ext/metrics
+```
+
+## Usage
+
+To get the node metrics:
+
+```sh
+curl -X POST 127.0.0.1:9650/ext/metrics
+```
+
+## Format
+
+This API produces Prometheus compatible metrics. See
+[here](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+for information on Prometheus’ formatting.
+
+[Here](../../../nodes/maintain/setting-up-node-monitoring.md) is a tutorial that
+shows how to set up Prometheus and Grafana to monitor DijetsNodeGo node using the
+Metrics API.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

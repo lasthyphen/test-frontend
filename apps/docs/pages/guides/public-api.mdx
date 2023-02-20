@@ -1,0 +1,83 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'public-api',
+  title: 'Public API Server',
+  description: 'The Public API server allows developers to access the Dijets platform without having to run a node themselves.',
+  sidebar_label: 'APIs',
+}
+
+There is a public API server that allows developers to access the Dijets
+network without having to run a node themselves. The public API server is
+actually several [DijetsNodeGo](https://github.com/Dijets-Inc/dijetsnodego) nodes
+behind a load balancer to ensure high availability and high request throughput.
+
+## Using the Public API Nodes
+
+The public API server is at `https://dijets.ukwest.cloudapp.azure.com:443` for Dijets Primary Network. To access a particular API,
+just append the relevant API endpoint, as described in the document
+[Issuing API Calls](/docs/guides/node-apis/issuing-api-calls). Following are the end-points you can use for
+each of the ternary chains respectively:
+
+### HTTP
+
+- For Utility Chain API, the URL is `https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/rpc`.
+- For Value Chain API, the URL is `https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/VC`.
+- For Method Chain API, the URL is `https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/MC`.
+
+### WebSocket
+
+- For Utility Chain API, the URL is `wss://dijets.ukwest.cloudapp.azure.com:443/ext/bc/C/ws`.
+
+### Supported APIs
+
+The public API server supports all the API endpoints that make sense to be
+available on a public-facing service, including APIs for the
+[Value Chain](/docs/guides/node-apis/value-chain-api), [Method Chain](/docs/guides/node-apis/method-chain-api),
+[Utility Chain](/docs/guides/node-apis/utility-chain-api), and full archival for the Primary Network.
+However, it doesn't support [Index APIs](/docs/guides/node-apis/index-api), which includes
+the Value Chain API's `getAddressTxs` method.
+
+### Limitations
+
+The public API only supports Utility Chain WebSocket API calls for API methods that
+don't exist on the Utility Chain's HTTP API.
+
+For batched Utility Chain requests on the public API node, the maximum number of items
+is 40. We're working on to support a larger batch size.
+
+The maximum number of blocks to serve per `getLogs` request is 2048, which is set by `api-max-blocks-per-request`
+
+### Sticky Sessions
+
+Requests to the public API server API are distributed by a load balancer to an
+individual node. As a result, consecutive requests may go to different nodes.
+That can cause issues for some use cases. For example, one node may think a
+given transaction is accepted, while for another node the transaction is still
+processing. To work around this, you can use 'sticky sessions', as documented
+[here](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials).
+This allows consecutive API calls to be routed to the same node.
+
+If you're using [DijetsJS](/docs/guides/dijetsjs) to access the public
+API, simply set the following in your code:
+
+```javascript
+dijets.setRequestConfig("withCredentials", true)
+```
+
+### Availability
+
+Usage of public API nodes is free and available to everyone without any
+authentication or authorization. Rate limiting is present, but many of the API
+calls are cached, and the rate limits are quite high. If your app is
+running up against the limits, please [contact us](mailto:support@dijets.io) or
+try using a community RPC provider.
+
+### Support
+
+If you have questions, problems, or suggestions, join the public support space on [Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org).
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} hideToc={true} />
+
+export default Page
+

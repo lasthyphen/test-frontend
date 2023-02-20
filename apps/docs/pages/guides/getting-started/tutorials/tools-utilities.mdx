@@ -1,0 +1,67 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'tools-utilities',
+  title: 'Tools & Utilities',
+  description: 'Learn how to use some of the common tools & utilities to interact, develop and test on Dijets',
+  sidebar_label: 'Nuxt 3',
+}
+
+There are a number of tools for managing your node and developing private subnetworks and enterprise consortia chains. This
+page lists the most popular ones, explains what they do and their intended usage.
+
+## DijetsNodeGo Installer
+
+DijetsNodeGo Installer is a shell (bash) script that installs DijetsNodeGo on a
+Linux computer. This script sets up full, running node in a matter of minutes
+with minimal user input required. This is convenient if you want to run the node
+as a service on a standalone Linux installation, for example to set up a
+(Subnet) validator, use the node as a private RPC server and similar uses. It
+also makes upgrading or reinstalling the nodes easy.
+
+If you want to run a node in a more complex environment, like in a docker or
+Kubernetes container, or as a part of an installation orchestrated using a tool
+like Terraform, this installer probably won't fit your purposes.
+
+## Dijets CLI
+
+Dijets CLI is a developer-centric command line tool that gives you access to
+everything Dijets. Setting up a local network, creating a Subnet, customizing
+the Subnet/VM configuration - this is the tool to use. It is under rapid
+development, so check back for new versions with expanded functionality.
+
+## Subnetwork CLI
+
+Subnetwork CLI is a command-line interface to manage Dijets Subnetworks and Enterprise Consortia Chains. It is intended
+for provisioning testnet or Mainnet subnetworks in production and allows for the use
+of Ledger device to store the controlling keys for increased
+operational security.
+
+## Dijets-Up
+
+Dijets-Up is a CLI tool that allows a user to define, create and
+interact with a network of Dijets nodes. Networks created with Dijets-Up are
+temporary and get destroyed when the tool is stopped, so the purpose of the tool
+is to be used for local development and testing the code in the early stages,
+before you're ready to deploy on permanent infrastructure (testnet or Mainnet).
+
+## DVEs (Dijets Virtual Engines)
+
+Dijets Virtual Engines (**DVEs**) is a command-line tool to manage virtual
+machines binaries on existing DijetsNodeGo instances. It enables to add/remove
+nodes to private networks and enterprise consortia chains, upgrade plugins to the virtual machine binaries as new versions get released.
+
+## Dijets Ops
+
+A single command to launch and configure network infrastructure (virtual
+machines or cloud instances). It can install Dijets nodes from scratch allowing
+for various configuration requirements. Provisions all resources required to run
+a node or network with recommended setups (configurable). This tool is intended
+for quickly creating, testing and iterating over various Dijets network
+infrastructure configurations for testing and simulation purposes. Use this to
+play with various setups and reproduce potential problems and issues with
+possible configurations.
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

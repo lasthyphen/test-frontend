@@ -1,0 +1,126 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'dijetsjs',
+  title: 'DijetsJs Overview',
+  description: 'Learn how to interact with Dijets Node using the javascript client library',
+  sidebar_label: 'Overview',
+  hide_table_of_contents: true,
+}
+
+Dijets JavaScript
+library, allows developers to interact with DijetsNodeGo instances, invoke
+Dijets Platform Functions and issue commands to the node APIs.
+
+The APIs currently supported by default are:
+
+The APIs currently supported by default are:
+
+- Authentication API
+- Admin API
+- Value Chain API
+- Utility Chain API
+- Method Chain API
+- Healthcheck API
+- Index API
+- Info API
+- Keystore API
+- Metrics API
+- Socket API
+
+DijetsJS was built to simplify development on Dijets. Using this library, any JavaScript
+developer is able to interact with a Dijets Node instance where the API endpoints have 
+been enabled for the developer’s consumption.
+
+DijetsJS enables developers to:
+
+- Manage private keys locally
+- Get UTXOs for specified addresses
+- Retrieve balances of addresses
+- Build and sign transactions
+- Issue signed transactions on any of Dijets Ternary Chain Ledgers
+- Create a Subnetwork or an Enterprise Consortia Chain
+- Swap native DJTX & other assets between the Ternary Chains
+- Add a Validator to the Dijets network
+- Add a Delegator to the Dijets network
+- Develop, test and manage a local node
+- Retrieve Dijets network information from a node instance
+
+## Requirements
+
+DijetsJS requires Node.js version 14.18.0 or higher to compile.
+
+<Admonition type="info">
+You can use [`nvm`](https://github.com/nvm-sh/nvm) to install the required node version on your system
+</Admonition>
+
+### Installation
+
+You can install DijetJs as a package using npm or yarn
+
+<Tabs
+  size="small"
+  type="underlined"
+  defaultActiveId="npm"
+>
+  <TabPanel id="npm" label="npm">
+
+    ```sh Terminal
+    npm install dijets
+    ```
+
+  </TabPanel>
+  <TabPanel id="yarn" label="Yarn">
+
+    ```sh Terminal
+    yarn add dijets
+    ```
+
+  </TabPanel>
+</Tabs>
+
+You can also pull the repo down directly
+
+```Terminal
+git clone https://github.com/Dijets-Inc/dijetsjs
+```
+
+ and build it from scratch:
+
+`npm run build`
+
+This will generate a pure JavaScript library and place it in a folder named
+"web" in the project root. The "dijetsjs" file can then be dropped into any
+project as a pure JavaScript implementation of Dijets.
+
+The DijetsJS library can be imported into your existing Node.js project as follows:
+
+```ts
+const dijets = require("dijets")
+```
+
+Or into your TypeScript project like this:
+
+```ts
+import { Dijets } from "dijets"
+```
+
+## Importing Essentials
+
+```ts
+import { Dijets, BinTools, Buffer, BN } from "dijets"
+
+let bintools = BinTools.getInstance()
+```
+
+The above lines import the libraries used in the tutorials. These libraries include:
+
+- dijets: The JavaScript module.
+- bn.js: Big number module used by DijetsJS.
+- buffer: A Buffer library.
+- BinTools: A singleton built into DijetsJS that is used for dealing with binary data.
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

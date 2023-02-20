@@ -1,0 +1,6 @@
+clispec: '001'
+flags:
+  - id: help
+    name: -h, --help
+    description: help for ecc
+    default_value: 'false'

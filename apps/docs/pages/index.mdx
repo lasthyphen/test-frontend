@@ -1,0 +1,240 @@
+import Layout from '~/layouts/DefaultLayout'
+import Link from 'next/link'
+import { GlassPanel, IconPanel, Button, IconChevronRight } from 'ui'
+
+export const meta = {
+  title: 'Dijets Technical Docs',
+  description:
+    'Dijets - Technical Docs',
+  subtitle: 'Developer Documentation and API Reference',
+}
+
+<h2 className="text-base max-w-xl m-0">
+
+This documentation is designed to help developers build with Dijets. It covers the fundamentals of Dijets 
+architecture and platform, its tech stack, public &amp; private APIs, and examples of its real world use-cases ranging from 
+digital asset management and supply chains to insurance, gaming, smart contracts and beyond.
+
+</h2>
+
+{/* start container */}
+
+<div className="flex flex-col gap-12 my-12">
+
+<div className="space-y-8">
+  <div
+    className="
+      border
+      relative
+      px-8 md:px-12 h-20
+      border-scale-400
+      overflow-hidden
+      min-w-full
+      rounded-lg
+      flex flex-row gap-6 items-center
+      "
+  >
+
+    <img
+      className="w-[48px] lg:w-[64px]"
+      src="/docs/img/cards/tutorials-small.svg"
+    />
+    <img
+      className="z-0 absolute -left-32 -bottom-48 w-[320px]"
+      src="/docs/img/purple-glow-dark.png"
+    />
+    <div className="
+      flex flex-col md:flex-row not-prose
+      h-full justify-center
+      md:items-center md:gap-3
+    ">
+      <h2 className="text-sm lg:text-base text-scale-1200 m-0">Best place to start?</h2>
+      <p className="text-sm lg:text-base text-scale-1100 m-0">Follow the step-by-step <Link href="/guides/getting-started#tutorials"><a className="m-0 text-scale-1200 underline">tutorial</a></Link> on how to build Dijets Node from source.</p>
+    </div>
+
+  </div>
+</div>
+
+<div>
+  <div className="max-w-xl">
+
+    ### Framework Documentation
+
+  </div>
+
+  <div className="grid grid-cols-12 gap-6 not-prose">
+    {products.map((product) => {
+      return (
+        <Link
+          href={`${product.href}`}
+          key={product.title}
+          passHref
+        >
+          <a className={product.span ?? 'col-span-12 md:col-span-4'}>
+            <GlassPanel {...product} background={true} showIconBg={true} showLink={true}>
+              {product.description}
+            </GlassPanel>
+          </a>
+        </Link>
+      )
+
+})}
+
+    {platform.map((product) => {
+      return (
+        <Link
+          href={`/${product.href}`}
+          key={product.title}
+          passHref
+        >
+          <a className={'col-span-12 md:col-span-6'}>
+            <GlassPanel {...product} background={false} showIconBg={true}>
+              {product.description}
+            </GlassPanel>
+          </a>
+        </Link>
+      )
+
+})}
+
+  </div>
+
+</div>
+
+<div>
+
+  <div className="max-w-xl">
+
+    ### Command Line Tools
+
+  </div>
+
+  <div className="grid grid-cols-12 gap-6 not-prose">
+    {apis.map((product) => {
+      return (
+        <Link
+          href={`/${product.href}`}
+          key={product.title}
+          passHref
+        >
+          <a className={product.span ?? 'col-span-12 lg:col-span-4'}>
+            <GlassPanel {...product} background={false} >
+              {product.description}
+            </GlassPanel>
+          </a>
+        </Link>
+      )
+
+})}
+
+  </div>
+</div>
+
+{/* end of container */}
+
+</div>
+
+export const products = [
+  {
+    title: 'Quickstart',
+    icon: '/docs/img/icons/menu/database',
+    hasLightIcon: true,
+    href: '/guides/getting-started',
+    description:
+      'Quickstart provides links to all the key guides, tutorials and reference docs for anyone just starting with Dijets Development.',
+    span: 'col-span-12 md:col-span-6',
+  },
+  {
+    title: 'APIs',
+    icon: '/docs/img/icons/menu/auth',
+    hasLightIcon: true,
+    href: '/guides/node-apis',
+    description:
+      'Learn all about the APIs provided by the Dijets Node server software and 3rd party client APIs used to interact with Dijets Network.',
+    span: 'col-span-12 md:col-span-6',
+  },
+  {
+    title: 'DijetsJS',
+    icon: '/docs/img/icons/menu/dijetsjs',
+    hasLightIcon: true,
+    href: '/guides/dijetsjs',
+    description:
+      'A Javascript Client Library to connect & interface with Dijets Nodes and Network.',
+  },
+  {
+    title: 'ECC Resources',
+    icon: '/docs/img/icons/menu/realtime',
+    hasLightIcon: true,
+    href: '/guides/build-ecc',
+    description:
+      'Configure, test and deploy Enterprise Consortia Chains with pre-built or custom VMs.',
+  },
+  {
+    title: 'Developer Toolchains',
+    icon: '/docs/img/icons/menu/functions',
+    hasLightIcon: true,
+    href: '/guides/developer-toolchains',
+    description:
+      'Guides for existing developer toolkits that are fully compatible with Dijets Utility Chain.',
+  },
+]
+
+export const apis = [
+  {
+    title: 'Dijets CLI',
+    icon: '/docs/img/icons/menu/cli-tools',
+    hasLightIcon: true,
+    href: '/guides/dijets-cli-tool',
+    description: 'CLI tool that helps develop, configure and deploy private blockchains & ECCs on Dijets. ',
+    span: 'col-span-12 md:col-span-6',
+  },
+  {
+    title: 'Dijets-Up CLI',
+    icon: '/docs/img/icons/menu/cli-tools',
+    hasLightIcon: true,
+    href: '/guides/dijets-up-tool',
+    description: 'CLI tool to run and interact with local test Dijets Networks.',
+    span: 'col-span-12 md:col-span-6',
+  },
+  {
+    title: 'Dijets-Account-Helper CLI',
+    icon: '/docs/img/icons/menu/cli-tools',
+    hasLightIcon: true,
+    href: '/guides/dijets-helper',
+    description: 'A collection of helpful scripts for generating addresses and private keys etc.',
+    span: 'col-span-12 md:col-span-6',
+  },
+  {
+    title: 'ECC CLI',
+    icon: '/docs/img/icons/menu/cli-tools',
+    hasLightIcon: true,
+    href: '/guides/dijets-ecc-tool',
+    description:
+      'Use the CLI to develop ECCs locally, configure VMs, and deploy them to different environments.',
+    span: 'col-span-12 md:col-span-6',
+  },
+]
+
+export const platform = [
+  {
+    header: '/docs/img/cards/sample-card-header-3.svg',
+    title: 'Smart Contracts & DApps',
+    icon: '/docs/img/icons/menu/platform',
+    hasLightIcon: true,
+    href: '/guides/launch-dapps-on-uc',
+    description:
+      'Learn all about Dijets Utility Chain and how to build DApps and deploy smart contracts on it.',
+  },
+  {
+    header: '/docs/img/cards/sample-card-header.svg',
+    title: 'DijetsNodeGo Resources',
+    icon: '/docs/img/icons/menu/resources',
+    hasLightIcon: true,
+    href: '/guides/nodes',
+    description: 'Learn all about building, maintaining, upgrading & configuring DijetsNodeGo instances.',
+  },
+]
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page

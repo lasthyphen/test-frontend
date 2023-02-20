@@ -1,0 +1,54 @@
+import Layout from '~/layouts/DefaultGuideLayout'
+
+export const meta = {
+  id: 'nodes',
+  title: 'Dijets Nodes',
+  description: 'Learn all about Dijets Nodes',
+  sidebar_label: 'Overview',
+}
+
+## Introduction
+
+A node is a computer that runs Dijets client software and is connected to other nodes on Dijets Primary Network. These nodes work together to verify transactions and verify the common blockchain database known as a ledger. 
+There are different client software programs with different features and purposes. 
+Dijets Node can be configured extensively to suit individual requirements.
+You can read more about node configuration and flags [here](/docs/guides/nodes/node-flags-configs)
+
+Running a validator node and staking with Dijets provides extremely competitive
+rewards depending on the length you stake for. The
+maximum rate is earned by staking for a year, whilst the lowest rate can be earned by staking for 14
+days. There is also no slashing, so you don’t need to worry about a hardware
+failure or bug in the client which typically results in slashing, or getting penalised.
+Instead with Dijets you only need to currently maintain at least 80% uptime
+to receive your rewards. Furthermore, if you fail to meet the uptime requirement of 80% for whatever reason,
+you do not get penalised for it but you don’t receive the rewards. 
+
+<Admonition type="info">
+Always keep your private keys secure. There is no need for validators to keep their private keys on nodes. Doing so will keep
+your funds secure even if someone breaks into
+your cloud environment and gains access to the node.
+</Admonition>
+
+Not only does running a validator node enable you to receive rewards in DJTX,
+but also enables you to validate other Subnetworks or [ECCs](ecc-overview) in the ecosystem as
+well and receive rewards in native tokens.
+
+Hardware requirements to run a validator in Dijets Network are very modest: 8 CPU cores, 16
+GB of RAM and 1 TB SSD. Dijets network is also one of the greenest and most eco-friendly blockchain networks.
+It does not require huge amounts of energy for computing and mining and
+is able to scale to millions of validators participating in network consensus all at once,
+offering unparalleled decentralisation.
+
+Currently the minimum amount required to stake to become a validator is 2,000
+DJTX (which can be reduced over time as price increases). Alternatively,
+validators can also charge a small fee to enable users to delegate their stake
+with them to help towards running costs.
+
+Running a Dijets Node as a validator has its incredible benefits, but for those
+that don’t meet the minimum staking requirements can always delegate their DJTX to
+earn staking rewards.
+
+
+export const Page = ({ children }) => <Layout meta={meta} children={children} />
+
+export default Page
